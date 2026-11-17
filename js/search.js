@@ -147,10 +147,28 @@ const FALLBACK_MOVIES = [
 // Curated games fallback catalog
 const FALLBACK_GAMES = [
   {
+    title: "DOOM Eternal",
+    type: "game",
+    releaseYear: 2020,
+    posterUrl: "https://cdn.akamai.steamstatic.com/steam/apps/782330/library_600x900_2x.jpg",
+    externalScore: { source: "Metacritic", rating: "88" },
+    genres: ["Action", "FPS", "Sci-Fi"],
+    platforms: ["PC", "PlayStation 5", "Xbox Series S/X"]
+  },
+  {
+    title: "DOOM (2016)",
+    type: "game",
+    releaseYear: 2016,
+    posterUrl: "https://cdn.akamai.steamstatic.com/steam/apps/379720/library_600x900_2x.jpg",
+    externalScore: { source: "Metacritic", rating: "85" },
+    genres: ["Action", "FPS", "Sci-Fi"],
+    platforms: ["PC", "PlayStation 4", "Xbox One"]
+  },
+  {
     title: "Elden Ring",
     type: "game",
     releaseYear: 2022,
-    posterUrl: "https://media.rawg.io/media/games/b29/b2931e21b142981993246f48b1bf7ee0.jpg",
+    posterUrl: "https://cdn.akamai.steamstatic.com/steam/apps/1245620/library_600x900_2x.jpg",
     externalScore: { source: "Metacritic", rating: "96" },
     genres: ["Action", "RPG", "Fantasy"],
     platforms: ["PC", "PlayStation 5", "Xbox Series S/X"]
@@ -159,7 +177,7 @@ const FALLBACK_GAMES = [
     title: "Baldur's Gate 3",
     type: "game",
     releaseYear: 2023,
-    posterUrl: "https://media.rawg.io/media/games/699/699222d81ab4b9c1d0f50bbda840ec24.jpg",
+    posterUrl: "https://cdn.akamai.steamstatic.com/steam/apps/1086940/library_600x900_2x.jpg",
     externalScore: { source: "Metacritic", rating: "96" },
     genres: ["RPG", "Fantasy", "Action"],
     platforms: ["PC", "PlayStation 5", "Xbox Series S/X"]
@@ -168,7 +186,7 @@ const FALLBACK_GAMES = [
     title: "Hollow Knight",
     type: "game",
     releaseYear: 2017,
-    posterUrl: "https://media.rawg.io/media/games/4cf/4cfc6b7f1850590a4634b08bfab308ab.jpg",
+    posterUrl: "https://cdn.akamai.steamstatic.com/steam/apps/367520/library_600x900_2x.jpg",
     externalScore: { source: "Metacritic", rating: "90" },
     genres: ["Action", "Adventure", "Platformer"],
     platforms: ["PC", "Nintendo Switch", "PlayStation 4"]
@@ -177,7 +195,7 @@ const FALLBACK_GAMES = [
     title: "Cyberpunk 2077",
     type: "game",
     releaseYear: 2020,
-    posterUrl: "https://media.rawg.io/media/games/26d/26d4437a21a86c78b51830f45ab23f6e.jpg",
+    posterUrl: "https://cdn.akamai.steamstatic.com/steam/apps/1091500/library_600x900_2x.jpg",
     externalScore: { source: "Metacritic", rating: "86" },
     genres: ["RPG", "Action", "Sci-Fi"],
     platforms: ["PC", "PlayStation 5", "Xbox Series S/X"]

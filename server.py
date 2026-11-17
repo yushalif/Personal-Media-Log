@@ -265,12 +265,12 @@ class MediaLogHandler(SimpleHTTPRequestHandler):
             self.send_json(200, {"results": []})
             return
 
-        # Anime search via Jikan (no key needed)
+        # Anime search via Jikan (and Kitsu fallback)
         if mtype == "anime":
             try:
                 jikan_url = f"https://api.jikan.moe/v4/anime?q={urllib.parse.quote(q)}&limit=12&sfw=true"
                 req = urllib.request.Request(jikan_url, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-                with urllib.request.urlopen(req, timeout=3) as resp:
+                with urllib.request.urlopen(req, timeout=4) as resp:
                     data = json.loads(resp.read().decode())
                     results = []
                     for item in data.get("data", []):
@@ -298,6 +298,65 @@ class MediaLogHandler(SimpleHTTPRequestHandler):
                         return
             except Exception as e:
                 print(f"Jikan server-side note: {e}")
+
+            # Kitsu fallback
+            try:
+                kitsu_url = f"https://kitsu.io/api/edge/anime?filter[text]={urllib.parse.quote(q)}&page[limit]=10"
+                req = urllib.request.Request(kitsu_url, headers={"Accept": "application/vnd.api+json", "User-Agent": "MediaLogApp/1.0"})
+                with urllib.request.urlopen(req, timeout=4) as resp:
+                    kdata = json.loads(resp.read().decode())
+                    results = []
+                    for a in kdata.get("data", []):
+                        attr = a.get("attributes", {})
+                        p = attr.get("posterImage", {})
+                        poster = p.get("large") or p.get("original") or p.get("medium") or ""
+                        sy = attr.get("startDate")
+                        results.append({
+                            "id": f"kitsu-{a.get('id')}",
+                            "title": attr.get("canonicalTitle") or "Anime",
+                            "type": "anime",
+                            "releaseYear": int(sy[:4]) if sy and len(sy) >= 4 else 2023,
+                            "posterUrl": poster,
+                            "externalScore": {"source": "Kitsu", "rating": f"{float(attr.get('averageRating', 80))/10:.1f}/10" if attr.get("averageRating") else "N/A"},
+                            "synopsis": attr.get("synopsis") or "",
+                            "genres": ["Anime"]
+                        })
+                    if results:
+                        self.send_json(200, {"results": results, "source": "kitsu"})
+                        return
+            except Exception as e:
+                print(f"Kitsu server-side note: {e}")
+
+        # TV Shows via TVMaze (Free & Keyless)
+        if mtype == "tv":
+            try:
+                tv_url = f"https://api.tvmaze.com/search/shows?q={urllib.parse.quote(q)}"
+                req = urllib.request.Request(tv_url, headers={"User-Agent": "Mozilla/5.0"})
+                with urllib.request.urlopen(req, timeout=4) as resp:
+                    data = json.loads(resp.read().decode())
+                    results = []
+                    for item in data:
+                        show = item.get("show", {})
+                        img = show.get("image") or {}
+                        poster = img.get("original") or img.get("medium") or ""
+                        prem = show.get("premiered")
+                        year = int(prem[:4]) if prem and len(prem) >= 4 else None
+                        rate = show.get("rating", {}).get("average")
+                        results.append({
+                            "id": f"tvmaze-{show.get('id')}",
+                            "title": show.get("name"),
+                            "type": "tv",
+                            "releaseYear": year,
+                            "posterUrl": poster,
+                            "externalScore": {"source": "TVMaze", "rating": f"{rate}/10" if rate else "N/A"},
+                            "genres": show.get("genres", ["Drama"]),
+                            "synopsis": (show.get("summary", "") or "").replace("<p>", "").replace("</p>", "").replace("<b>", "").replace("</b>", "").strip()
+                        })
+                    if results:
+                        self.send_json(200, {"results": results[:12], "source": "tvmaze"})
+                        return
+            except Exception as e:
+                print(f"TVMaze error: {e}")
 
         # Movies & TV via TMDB
         if (mtype in ("movie", "tv")) and TMDB_API_KEY:
@@ -331,31 +390,61 @@ class MediaLogHandler(SimpleHTTPRequestHandler):
             except Exception as e:
                 print(f"TMDB error: {e}")
 
-        # Games via RAWG
-        if mtype == "game" and RAWG_API_KEY:
+        # Games via RAWG (or Steam Store Search fallback - Free & keyless)
+        if mtype == "game":
+            if RAWG_API_KEY:
+                try:
+                    rawg_url = f"https://api.rawg.io/api/games?key={RAWG_API_KEY}&search={urllib.parse.quote(q)}&page_size=12"
+                    req = urllib.request.Request(rawg_url)
+                    with urllib.request.urlopen(req, timeout=5) as resp:
+                        data = json.loads(resp.read().decode())
+                        results = []
+                        for item in data.get("results", []):
+                            released = item.get("released")
+                            year = int(released[:4]) if released and len(released) >= 4 else None
+                            meta = item.get("metacritic")
+                            results.append({
+                                "id": f"rawg-{item.get('id')}",
+                                "title": item.get("name"),
+                                "type": "game",
+                                "releaseYear": year,
+                                "posterUrl": item.get("background_image", ""),
+                                "externalScore": {"source": "Metacritic", "rating": str(meta) if meta else "N/A"},
+                                "genres": [g.get("name") for g in item.get("genres", [])]
+                            })
+                        if results:
+                            self.send_json(200, {"results": results, "source": "rawg"})
+                            return
+                except Exception as e:
+                    print(f"RAWG error: {e}")
+
+            # Live Steam Store Search (Official high-res 600x900 library capsule posters)
             try:
-                rawg_url = f"https://api.rawg.io/api/games?key={RAWG_API_KEY}&search={urllib.parse.quote(q)}&page_size=12"
-                req = urllib.request.Request(rawg_url)
+                steam_url = f"https://store.steampowered.com/api/storesearch/?term={urllib.parse.quote(q)}&l=english&cc=US"
+                req = urllib.request.Request(steam_url, headers={"User-Agent": "Mozilla/5.0"})
                 with urllib.request.urlopen(req, timeout=5) as resp:
                     data = json.loads(resp.read().decode())
                     results = []
-                    for item in data.get("results", []):
-                        released = item.get("released")
-                        year = int(released[:4]) if released and len(released) >= 4 else None
-                        meta = item.get("metacritic")
+                    for item in data.get("items", []):
+                        app_id = item.get("id")
+                        poster = f"https://cdn.akamai.steamstatic.com/steam/apps/{app_id}/library_600x900_2x.jpg"
+                        meta = item.get("metascore")
                         results.append({
-                            "id": f"rawg-{item.get('id')}",
+                            "id": f"steam-{app_id}",
                             "title": item.get("name"),
                             "type": "game",
-                            "releaseYear": year,
-                            "posterUrl": item.get("background_image", ""),
-                            "externalScore": {"source": "Metacritic", "rating": str(meta) if meta else "N/A"},
-                            "genres": [g.get("name") for g in item.get("genres", [])]
+                            "releaseYear": None,
+                            "posterUrl": poster,
+                            "externalScore": {"source": "Metacritic" if meta else "Steam", "rating": str(meta) if meta else "Verified"},
+                            "platforms": ["PC"],
+                            "genres": ["Video Game"],
+                            "synopsis": f"Available on Steam (App ID: {app_id})."
                         })
-                    self.send_json(200, {"results": results, "source": "rawg"})
-                    return
+                    if results:
+                        self.send_json(200, {"results": results[:12], "source": "steam"})
+                        return
             except Exception as e:
-                print(f"RAWG error: {e}")
+                print(f"Steam search error: {e}")
 
         # Books via OpenLibrary (no key needed)
         if mtype == "book":
