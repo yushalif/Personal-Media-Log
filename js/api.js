@@ -82,8 +82,64 @@ export const api = {
     sessionStorage.removeItem(TOKEN_KEY);
   },
 
+  // In-browser GitHub Cloud Sync configuration
+  getGitHubConfig() {
+    try {
+      const cfg = localStorage.getItem('medialog_github_config');
+      return cfg ? JSON.parse(cfg) : null;
+    } catch {
+      return null;
+    }
+  },
+
+  setGitHubConfig(config) {
+    if (!config) {
+      localStorage.removeItem('medialog_github_config');
+    } else {
+      localStorage.setItem('medialog_github_config', JSON.stringify(config));
+    }
+  },
+
+  async testGitHubConnection(config) {
+    const token = this.getToken();
+    try {
+      const res = await fetch('/api/save-media', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+          'x-github-token': config.token || '',
+          'x-github-owner': config.owner || '',
+          'x-github-repo': config.repo || '',
+          'x-github-branch': config.branch || 'main'
+        },
+        body: JSON.stringify({
+          action: 'test-connection',
+          githubToken: config.token,
+          githubOwner: config.owner,
+          githubRepo: config.repo,
+          githubBranch: config.branch || 'main'
+        })
+      });
+      const data = await res.json();
+      return { success: res.ok && data.ok, data, error: data.error };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  },
+
   // Load media log (databaseless read flow)
   async loadMediaLog() {
+    const localCache = localStorage.getItem(STORAGE_KEY);
+    let cachedItems = null;
+    if (localCache) {
+      try {
+        cachedItems = JSON.parse(localCache);
+      } catch (e) {
+        console.warn('Corrupt local cache:', e);
+      }
+    }
+
     try {
       // 1. Fetch data/media-log.json from repository with safety timeout
       const controller = new AbortController();
@@ -93,8 +149,39 @@ export const api = {
       if (res.ok) {
         const repoData = await res.json();
         if (Array.isArray(repoData)) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(repoData));
-          return repoData;
+          // If repo has items
+          if (repoData.length > 0) {
+            if (Array.isArray(cachedItems) && cachedItems.length > 0) {
+              const repoMap = new Map(repoData.map(x => [x.id, x]));
+              const localMap = new Map(cachedItems.map(x => [x.id, x]));
+              const allIds = new Set([...repoMap.keys(), ...localMap.keys()]);
+              const merged = [];
+              for (const id of allIds) {
+                const r = repoMap.get(id);
+                const l = localMap.get(id);
+                if (r && l) {
+                  const rTime = new Date(r.updatedAt || r.createdAt || 0).getTime();
+                  const lTime = new Date(l.updatedAt || l.createdAt || 0).getTime();
+                  merged.push(lTime >= rTime ? l : r);
+                } else if (l) {
+                  merged.push(l);
+                } else if (r) {
+                  merged.push(r);
+                }
+              }
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+              return merged;
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(repoData));
+            return repoData;
+          } else {
+            // Repo has 0 items ([]), but user has logged items in this browser!
+            if (Array.isArray(cachedItems) && cachedItems.length > 0) {
+              return cachedItems;
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+            return [];
+          }
         }
       }
     } catch (err) {
@@ -102,14 +189,8 @@ export const api = {
     }
 
     // 2. Fallback to localStorage if offline/preview
-    const localCache = localStorage.getItem(STORAGE_KEY);
-    if (localCache) {
-      try {
-        const cached = JSON.parse(localCache);
-        if (Array.isArray(cached)) return cached;
-      } catch (e) {
-        console.warn('Corrupt local cache:', e);
-      }
+    if (Array.isArray(cachedItems)) {
+      return cachedItems;
     }
 
     return [];
@@ -144,16 +225,27 @@ export const api = {
     // If Admin token is present, try serverless endpoint /api/save-media
     if (token) {
       try {
+        const ghConfig = this.getGitHubConfig() || {};
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        };
+        if (ghConfig.token) headers['x-github-token'] = ghConfig.token;
+        if (ghConfig.owner) headers['x-github-owner'] = ghConfig.owner;
+        if (ghConfig.repo) headers['x-github-repo'] = ghConfig.repo;
+        if (ghConfig.branch) headers['x-github-branch'] = ghConfig.branch;
+
         const res = await fetch('/api/save-media', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-          },
+          headers,
           body: JSON.stringify({
             action: 'save',
             item: item,
-            items: updatedList
+            items: updatedList,
+            githubToken: ghConfig.token,
+            githubOwner: ghConfig.owner,
+            githubRepo: ghConfig.repo,
+            githubBranch: ghConfig.branch
           })
         });
 
@@ -164,7 +256,11 @@ export const api = {
             return {
               success: true,
               storage: result.storage || 'server',
-              message: result.message || 'Saved successfully!',
+              message: result.storage === 'github' 
+                ? 'Committed directly to GitHub repository!' 
+                : (result.storage === 'local-file' 
+                    ? 'Saved directly to data/media-log.json' 
+                    : 'Saved to browser storage. (Set GitHub Token to sync cloud repo)'),
               items: result.data
             };
           }
@@ -177,7 +273,7 @@ export const api = {
     return {
       success: true,
       storage: 'localstorage-fallback',
-      message: 'Saved to local browser storage (Dev / Preview mode)',
+      message: 'Saved to local browser storage',
       items: updatedList
     };
   },
@@ -192,16 +288,27 @@ export const api = {
 
     if (token) {
       try {
+        const ghConfig = this.getGitHubConfig() || {};
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        };
+        if (ghConfig.token) headers['x-github-token'] = ghConfig.token;
+        if (ghConfig.owner) headers['x-github-owner'] = ghConfig.owner;
+        if (ghConfig.repo) headers['x-github-repo'] = ghConfig.repo;
+        if (ghConfig.branch) headers['x-github-branch'] = ghConfig.branch;
+
         const res = await fetch('/api/save-media', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': token
-          },
+          headers,
           body: JSON.stringify({
             action: 'delete',
             id: id,
-            items: updatedList
+            items: updatedList,
+            githubToken: ghConfig.token,
+            githubOwner: ghConfig.owner,
+            githubRepo: ghConfig.repo,
+            githubBranch: ghConfig.branch
           })
         });
 
@@ -212,7 +319,7 @@ export const api = {
             return {
               success: true,
               storage: result.storage || 'server',
-              message: result.message || 'Deleted successfully',
+              message: result.storage === 'github' ? 'Committed deletion to GitHub!' : 'Deleted successfully',
               items: result.data
             };
           }
@@ -228,6 +335,34 @@ export const api = {
       message: 'Deleted from local browser storage',
       items: updatedList
     };
+  },
+
+  // Push all local items to GitHub
+  async pushAllToGitHub(items) {
+    const token = this.getToken();
+    const ghConfig = this.getGitHubConfig() || {};
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token
+    };
+    if (ghConfig.token) headers['x-github-token'] = ghConfig.token;
+    if (ghConfig.owner) headers['x-github-owner'] = ghConfig.owner;
+    if (ghConfig.repo) headers['x-github-repo'] = ghConfig.repo;
+    if (ghConfig.branch) headers['x-github-branch'] = ghConfig.branch;
+
+    const res = await fetch('/api/save-media', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        action: 'replace',
+        items: items,
+        githubToken: ghConfig.token,
+        githubOwner: ghConfig.owner,
+        githubRepo: ghConfig.repo,
+        githubBranch: ghConfig.branch
+      })
+    });
+    return await res.json();
   },
 
   // Reset to original data/media-log.json

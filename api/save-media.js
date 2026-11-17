@@ -45,28 +45,58 @@ export default async function handler(req, res) {
     });
   }
 
-  const {
-    GITHUB_TOKEN,
-    GITHUB_OWNER,
-    GITHUB_REPO,
-    GITHUB_BRANCH = 'main'
-  } = process.env;
-
   try {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const { action, item, id, items } = body;
 
+    const githubToken = process.env.GITHUB_TOKEN || req.headers['x-github-token'] || body.githubToken || '';
+    const githubOwner = process.env.GITHUB_OWNER || req.headers['x-github-owner'] || body.githubOwner || '';
+    const githubRepo = process.env.GITHUB_REPO || req.headers['x-github-repo'] || body.githubRepo || '';
+    const githubBranch = process.env.GITHUB_BRANCH || req.headers['x-github-branch'] || body.githubBranch || 'main';
+
     let currentLog = [];
     let fileSha = null;
 
-    const hasGitHubConfig = Boolean(GITHUB_TOKEN && GITHUB_OWNER && GITHUB_REPO);
+    const hasGitHubConfig = Boolean(githubToken && githubOwner && githubRepo);
+
+    // Dedicated action to test GitHub credentials
+    if (action === 'test-connection') {
+      if (!hasGitHubConfig) {
+        return res.status(400).json({
+          ok: false,
+          error: 'Missing GitHub configuration. Please provide Token, Owner, and Repo.'
+        });
+      }
+      const testRes = await fetch(`https://api.github.com/repos/${githubOwner}/${githubRepo}`, {
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'User-Agent': 'Media-Log-App'
+        }
+      });
+      if (testRes.ok) {
+        const repoInfo = await testRes.json();
+        return res.status(200).json({
+          ok: true,
+          message: `Connected to GitHub repository "${repoInfo.full_name}" successfully!`,
+          repoName: repoInfo.full_name,
+          private: repoInfo.private
+        });
+      } else {
+        const errText = await testRes.text();
+        return res.status(testRes.status).json({
+          ok: false,
+          error: `GitHub test failed (${testRes.status}): ${errText}`
+        });
+      }
+    }
 
     if (hasGitHubConfig) {
       // 1. Fetch current data/media-log.json from GitHub Contents API
-      const fileUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/data/media-log.json?ref=${GITHUB_BRANCH}`;
+      const fileUrl = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/data/media-log.json?ref=${githubBranch}`;
       const ghFetchRes = await fetch(fileUrl, {
         headers: {
-          'Authorization': `Bearer ${GITHUB_TOKEN}`,
+          'Authorization': `Bearer ${githubToken}`,
           'Accept': 'application/vnd.github.v3+json',
           'User-Agent': 'Media-Log-App'
         }
@@ -145,13 +175,13 @@ export default async function handler(req, res) {
 
     // Commit back to GitHub if configured
     if (hasGitHubConfig) {
-      const putUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/data/media-log.json`;
+      const putUrl = `https://api.github.com/repos/${githubOwner}/${githubRepo}/contents/data/media-log.json`;
       const base64Content = Buffer.from(updatedJsonString, 'utf-8').toString('base64');
 
       const payload = {
         message: commitMessage,
         content: base64Content,
-        branch: GITHUB_BRANCH
+        branch: githubBranch
       };
       if (fileSha) {
         payload.sha = fileSha;
@@ -160,7 +190,7 @@ export default async function handler(req, res) {
       const putRes = await fetch(putUrl, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${GITHUB_TOKEN}`,
+          'Authorization': `Bearer ${githubToken}`,
           'Accept': 'application/vnd.github.v3+json',
           'Content-Type': 'application/json',
           'User-Agent': 'Media-Log-App'

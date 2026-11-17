@@ -137,31 +137,157 @@ class MediaLogApp {
       ui.openLogModal({ type: defaultType });
     });
 
-    document.getElementById('btnSyncRepo')?.addEventListener('click', async () => {
-      const choice = prompt('Data Synchronization:\n1: Export JSON Backup\n2: Re-sync / Reset from original repository data\n\nEnter 1 or 2:', '1');
-      if (choice === '1') {
-        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.mediaList, null, 2));
-        const downloadAnchor = document.createElement('a');
-        downloadAnchor.setAttribute('href', dataStr);
-        downloadAnchor.setAttribute('download', `medialog-backup-${new Date().toISOString().slice(0, 10)}.json`);
-        document.body.appendChild(downloadAnchor);
-        downloadAnchor.click();
-        downloadAnchor.remove();
-        ui.showToast('Downloaded JSON backup successfully!', 'success');
-        const ts = document.getElementById('syncRepoTimestamp');
-        if (ts) ts.textContent = 'Exported just now';
-      } else if (choice === '2') {
-        if (confirm('Reset to original repository data? Any unsaved local edits will be replaced.')) {
-          const res = await api.resetToRepositoryData();
-          if (res.success) {
-            this.mediaList = res.items;
+    document.getElementById('btnOpenCloudSync')?.addEventListener('click', () => {
+      this.openStorageModal();
+    });
+
+    document.getElementById('btnSyncRepo')?.addEventListener('click', () => {
+      this.openStorageModal();
+    });
+
+    document.getElementById('btnCloseStorageModal')?.addEventListener('click', () => {
+      this.closeStorageModal();
+    });
+    document.getElementById('btnCloseStorageModalFooter')?.addEventListener('click', () => {
+      this.closeStorageModal();
+    });
+
+    // Save GitHub Credentials
+    document.getElementById('btnSaveGithubConfig')?.addEventListener('click', async () => {
+      const token = document.getElementById('cfgGithubToken')?.value.trim();
+      const owner = document.getElementById('cfgGithubOwner')?.value.trim();
+      const repo = document.getElementById('cfgGithubRepo')?.value.trim();
+
+      if (!token && !owner && !repo) {
+        api.setGitHubConfig(null);
+        this.updateStorageModalStatus();
+        ui.showToast('Cleared GitHub credentials. Using browser storage.', 'info');
+        return;
+      }
+
+      if (!token || !owner || !repo) {
+        ui.showToast('Please fill in Token, Owner, and Repo', 'warning');
+        return;
+      }
+
+      const cfg = { token, owner, repo, branch: 'main' };
+      api.setGitHubConfig(cfg);
+      this.updateStorageModalStatus();
+      ui.showToast('GitHub credentials saved! Testing connection...', 'info');
+
+      const testRes = await api.testGitHubConnection(cfg);
+      const fb = document.getElementById('cfgGithubFeedback');
+      if (fb) {
+        fb.style.display = 'block';
+        if (testRes.success) {
+          fb.style.background = 'rgba(16,185,129,0.15)';
+          fb.style.color = '#34d399';
+          fb.style.border = '1px solid rgba(16,185,129,0.3)';
+          fb.textContent = `✓ Success: Connected to GitHub repo "${cfg.owner}/${cfg.repo}"! All additions and edits will now auto-commit.`;
+          ui.showToast('Connected to GitHub repository successfully!', 'success');
+        } else {
+          fb.style.background = 'rgba(244,63,94,0.15)';
+          fb.style.color = '#fb7185';
+          fb.style.border = '1px solid rgba(244,63,94,0.3)';
+          fb.textContent = `✗ Connection failed: ${testRes.error || 'Please check token and repository name.'}`;
+        }
+      }
+    });
+
+    // Test GitHub Connection button
+    document.getElementById('btnTestGithub')?.addEventListener('click', async () => {
+      const token = document.getElementById('cfgGithubToken')?.value.trim();
+      const owner = document.getElementById('cfgGithubOwner')?.value.trim();
+      const repo = document.getElementById('cfgGithubRepo')?.value.trim();
+
+      if (!token || !owner || !repo) {
+        ui.showToast('Please enter Token, Owner, and Repo to test', 'warning');
+        return;
+      }
+
+      ui.showToast('Testing GitHub connection...', 'info');
+      const testRes = await api.testGitHubConnection({ token, owner, repo, branch: 'main' });
+      const fb = document.getElementById('cfgGithubFeedback');
+      if (fb) {
+        fb.style.display = 'block';
+        if (testRes.success) {
+          fb.style.background = 'rgba(16,185,129,0.15)';
+          fb.style.color = '#34d399';
+          fb.style.border = '1px solid rgba(16,185,129,0.3)';
+          fb.textContent = `✓ Verified! Connected to "${owner}/${repo}" with read/write permissions.`;
+          ui.showToast('Connection verified!', 'success');
+        } else {
+          fb.style.background = 'rgba(244,63,94,0.15)';
+          fb.style.color = '#fb7185';
+          fb.style.border = '1px solid rgba(244,63,94,0.3)';
+          fb.textContent = `✗ Connection failed: ${testRes.error || 'Check token permissions (requires repo scope).'}`;
+        }
+      }
+    });
+
+    // Download JSON in modal
+    document.getElementById('btnExportJsonModal')?.addEventListener('click', () => {
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(this.mediaList, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute('download', `media-log.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      ui.showToast('Downloaded media-log.json!', 'success');
+      const ts = document.getElementById('syncRepoTimestamp');
+      if (ts) ts.textContent = 'Exported just now';
+    });
+
+    // Import JSON File
+    document.getElementById('inputImportJsonFile')?.addEventListener('change', (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (!Array.isArray(parsed)) {
+            ui.showToast('Invalid file: JSON must contain an array of media entries', 'error');
+            return;
+          }
+          if (confirm(`Import ${parsed.length} entries from "${file.name}"? This will update your media log.`)) {
+            this.mediaList = parsed;
+            localStorage.setItem('medialog_entries_cache_v4', JSON.stringify(parsed));
             this.refreshCurrentView();
             statsService.renderStatsBar(this.mediaList);
-            ui.showToast('Re-synced with repository data!', 'success');
+            ui.showToast(`Imported ${parsed.length} items successfully!`, 'success');
             const ts = document.getElementById('syncRepoTimestamp');
-            if (ts) ts.textContent = 'Synced just now';
+            if (ts) ts.textContent = `Imported ${parsed.length} items`;
+            this.closeStorageModal();
           }
+        } catch (err) {
+          ui.showToast('Error parsing JSON file: ' + err.message, 'error');
         }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // Push All to GitHub
+    document.getElementById('btnPushAllToGithub')?.addEventListener('click', async () => {
+      if (!api.isAdmin()) {
+        ui.showToast('Admin login required to push to GitHub', 'warning');
+        return;
+      }
+      ui.showToast('Pushing all entries to GitHub repository...', 'info');
+      try {
+        const res = await api.pushAllToGitHub(this.mediaList);
+        if (res.ok) {
+          ui.showToast('All items pushed to GitHub successfully!', 'success');
+          const ts = document.getElementById('syncRepoTimestamp');
+          if (ts) ts.textContent = 'Pushed to GitHub';
+        } else {
+          ui.showToast('GitHub push failed: ' + (res.error || 'Check token permissions'), 'error');
+        }
+      } catch (err) {
+        ui.showToast('Push error: ' + err.message, 'error');
       }
     });
 
@@ -1040,6 +1166,59 @@ class MediaLogApp {
     modal.classList.remove('active');
     modal.style.display = 'none';
     this.fixPosterTargetItem = null;
+  }
+
+  // ===================================================================
+  // Storage & Cloud Sync Setup Modal
+  // ===================================================================
+  openStorageModal() {
+    const modal = document.getElementById('storageModal');
+    if (!modal) return;
+
+    const ghConfig = api.getGitHubConfig() || {};
+    const inputToken = document.getElementById('cfgGithubToken');
+    const inputOwner = document.getElementById('cfgGithubOwner');
+    const inputRepo = document.getElementById('cfgGithubRepo');
+    if (inputToken) inputToken.value = ghConfig.token || '';
+    if (inputOwner) inputOwner.value = ghConfig.owner || '';
+    if (inputRepo) inputRepo.value = ghConfig.repo || '';
+
+    this.updateStorageModalStatus();
+
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+  }
+
+  closeStorageModal() {
+    const modal = document.getElementById('storageModal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
+
+  updateStorageModalStatus() {
+    const ghConfig = api.getGitHubConfig();
+    const badge = document.getElementById('syncStatusBadge');
+    const title = document.getElementById('syncStatusTitle');
+    const desc = document.getElementById('syncStatusDesc');
+    const feedback = document.getElementById('cfgGithubFeedback');
+    if (feedback) feedback.style.display = 'none';
+
+    if (ghConfig && ghConfig.token && ghConfig.owner && ghConfig.repo) {
+      if (badge) {
+        badge.className = 'status-pill status-completed';
+        badge.textContent = 'Cloud Sync Configured';
+      }
+      if (title) title.textContent = `GitHub Auto-Commit Active`;
+      if (desc) desc.textContent = `Target: ${ghConfig.owner}/${ghConfig.repo} (Branch: ${ghConfig.branch || 'main'})`;
+    } else {
+      if (badge) {
+        badge.className = 'status-pill status-in-progress';
+        badge.textContent = 'Browser Storage Only';
+      }
+      if (title) title.textContent = 'Local Browser Mode';
+      if (desc) desc.textContent = 'Changes stay saved in this browser. Configure GitHub below or add Vercel env vars to auto-commit to repository.';
+    }
   }
 
   // ===================================================================
