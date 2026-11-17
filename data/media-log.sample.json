@@ -1,0 +1,1429 @@
+[
+  {
+    "id": "item-1715000001",
+    "title": "Spirited Away",
+    "type": "anime",
+    "releaseYear": 2001,
+    "genres": [
+      "Animation",
+      "Fantasy",
+      "Adventure"
+    ],
+    "posterUrl": "https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "8.53"
+    },
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Liam",
+    "socialContext": [
+      "Solo",
+      "With Family"
+    ],
+    "dateExperienced": "2024-02-14",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "A timeless masterpiece. Joe Hisaishi's 'One Summer's Day' alone brings tears to my eyes. The train scene across the flooded tracks remains the pinnacle of cinematic atmosphere.",
+    "createdAt": "2024-02-14T20:15:00.000Z",
+    "updatedAt": "2024-02-14T20:15:00.000Z"
+  },
+  {
+    "id": "item-1715000002",
+    "title": "Interstellar",
+    "type": "movie",
+    "releaseYear": 2014,
+    "genres": [
+      "Sci-Fi",
+      "Drama",
+      "Adventure"
+    ],
+    "posterUrl": "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_SX300.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.7"
+    },
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "With Friends"
+    ],
+    "dateExperienced": "2024-03-22",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "The video message scene after Miller's planet broke me completely. Hans Zimmer's pipe organ score elevates every single sequence. A modern sci-fi benchmark.",
+    "createdAt": "2024-03-22T22:30:00.000Z",
+    "updatedAt": "2024-03-22T22:30:00.000Z"
+  },
+  {
+    "id": "item-1715000003",
+    "title": "Elden Ring",
+    "type": "game",
+    "releaseYear": 2022,
+    "genres": [
+      "Action",
+      "RPG",
+      "Fantasy"
+    ],
+    "posterUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.jpg",
+    "externalScore": {
+      "source": "Metacritic",
+      "rating": "96"
+    },
+    "status": "Completed",
+    "discoverySource": "Reddit / Forum",
+    "recommendedBy": "r/eldenring",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-01-10",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 5,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "platform": "PC",
+      "difficulty": "Master",
+      "hoursPlayed": 185,
+      "timesFinished": 2,
+      "achievements": {
+        "unlocked": 42,
+        "total": 42
+      }
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Unrivaled sense of awe and open-world exploration. Taking the elevator down into Siofra River for the first time was genuinely magical.",
+    "createdAt": "2024-01-10T18:00:00.000Z",
+    "updatedAt": "2024-01-10T18:00:00.000Z"
+  },
+  {
+    "id": "item-1715000004",
+    "title": "Frieren: Beyond Journey's End",
+    "type": "anime",
+    "releaseYear": 2023,
+    "genres": [
+      "Fantasy",
+      "Drama",
+      "Adventure"
+    ],
+    "posterUrl": "https://cdn.myanimelist.net/images/anime/1015/138006l.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "9.35"
+    },
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-04-05",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "The melancholic passage of time captured with such grace. Himmel's kindness echoes through Frieren's century-long lifespan.",
+    "createdAt": "2024-04-05T19:00:00.000Z",
+    "updatedAt": "2024-04-05T19:00:00.000Z"
+  },
+  {
+    "id": "item-1715000005",
+    "title": "Cyberpunk: Edgerunners",
+    "type": "anime",
+    "releaseYear": 2022,
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Romance"
+    ],
+    "posterUrl": "https://upload.wikimedia.org/wikipedia/en/a/a1/Cyberpunk_Edgerunners_poster.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "8.61"
+    },
+    "status": "Completed",
+    "discoverySource": "YouTube / TikTok",
+    "recommendedBy": "Trending edits",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-11-20",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 4,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Studio Trigger at their kinetic best. Lucy and David deserved the moon.",
+    "createdAt": "2023-11-20T21:00:00.000Z",
+    "updatedAt": "2023-11-20T21:00:00.000Z"
+  },
+  {
+    "id": "item-1715000006",
+    "title": "Hollow Knight",
+    "type": "game",
+    "releaseYear": 2017,
+    "genres": [
+      "Action",
+      "Adventure",
+      "Platformer"
+    ],
+    "posterUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7f.jpg",
+    "externalScore": {
+      "source": "Metacritic",
+      "rating": "90"
+    },
+    "status": "Completed",
+    "discoverySource": "Random browse",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-09-12",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "platform": "PC",
+      "difficulty": "Hard",
+      "hoursPlayed": 78,
+      "timesFinished": 1,
+      "achievements": {
+        "unlocked": 53,
+        "total": 63
+      }
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Hallownest is one of the most cohesive, atmospheric game worlds ever built. City of Tears is pure magic.",
+    "createdAt": "2023-09-12T16:00:00.000Z",
+    "updatedAt": "2023-09-12T16:00:00.000Z"
+  },
+  {
+    "id": "item-1715000007",
+    "title": "Dune: Part Two",
+    "type": "movie",
+    "releaseYear": 2024,
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Adventure"
+    ],
+    "posterUrl": "https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_SX300.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.6"
+    },
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "With Partner"
+    ],
+    "dateExperienced": "2024-03-05",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "A grand, operatic spectacle. Paul's descent into messianic vengeance and leadership is captivating.",
+    "createdAt": "2024-03-05T21:40:00.000Z",
+    "updatedAt": "2024-03-05T21:40:00.000Z"
+  },
+  {
+    "id": "item-1715000008",
+    "title": "Baldur's Gate 3",
+    "type": "game",
+    "releaseYear": 2023,
+    "genres": [
+      "RPG",
+      "Fantasy",
+      "Action"
+    ],
+    "posterUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co670h.jpg",
+    "externalScore": {
+      "source": "Metacritic",
+      "rating": "96"
+    },
+    "status": "In Progress",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Devon",
+    "socialContext": [
+      "With Friends",
+      "Solo"
+    ],
+    "dateExperienced": "2024-05-01",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "platform": "PC",
+      "difficulty": "Tactician",
+      "hoursPlayed": 142,
+      "timesFinished": 0,
+      "achievements": {
+        "unlocked": 35,
+        "total": 54
+      }
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "The sheer breadth of player freedom and voice acting is unprecedented in modern gaming. Astarion and Shadowheart have unmatched narrative arcs.",
+    "createdAt": "2024-05-01T14:30:00.000Z",
+    "updatedAt": "2024-05-01T14:30:00.000Z"
+  },
+  {
+    "id": "item-1715000009",
+    "title": "Arcane",
+    "type": "tv",
+    "releaseYear": 2021,
+    "genres": [
+      "Animation",
+      "Action",
+      "Sci-Fi",
+      "Drama"
+    ],
+    "posterUrl": "https://static.tvmaze.com/uploads/images/original_untouched/536/1340287.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "9.0"
+    },
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Marcus",
+    "socialContext": [
+      "With Friends"
+    ],
+    "dateExperienced": "2023-12-18",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 4,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "A revolutionary triumph of animation by Fortiche. Silco and Jinx's dynamic is complex and heart-wrenching.",
+    "createdAt": "2023-12-18T22:00:00.000Z",
+    "updatedAt": "2023-12-18T22:00:00.000Z",
+    "tvDetails": {
+      "network": "Netflix",
+      "totalEpisodes": 9,
+      "watchedEpisodes": 9,
+      "currentEpisode": "S01E09",
+      "rewatches": 2,
+      "seasons": [
+        {
+          "seasonNumber": 1,
+          "title": "Act I-III",
+          "episodesCount": 9,
+          "watchedCount": 9,
+          "rating": 9.8
+        }
+      ]
+    }
+  },
+  {
+    "id": "item-1715000010",
+    "title": "Severance",
+    "type": "tv",
+    "releaseYear": 2022,
+    "genres": [
+      "Sci-Fi",
+      "Thriller",
+      "Drama"
+    ],
+    "posterUrl": "https://static.tvmaze.com/uploads/images/original_untouched/548/1371406.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.7"
+    },
+    "status": "In Progress",
+    "discoverySource": "Reddit / Forum",
+    "recommendedBy": "r/television",
+    "socialContext": [
+      "With Partner"
+    ],
+    "dateExperienced": "2024-04-20",
+    "metrics": {
+      "favorite": 4,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "One of the tensest season finales in television history. The sterile corporate brutalism juxtaposed with psychological existential horror is genius.",
+    "createdAt": "2024-04-20T20:00:00.000Z",
+    "updatedAt": "2024-04-20T20:00:00.000Z",
+    "tvDetails": {
+      "network": "Apple TV+",
+      "totalEpisodes": 9,
+      "watchedEpisodes": 6,
+      "currentEpisode": "S01E07",
+      "rewatches": 0,
+      "seasons": [
+        {
+          "seasonNumber": 1,
+          "title": "Season 1",
+          "episodesCount": 9,
+          "watchedCount": 6,
+          "rating": 9.4
+        }
+      ]
+    }
+  },
+  {
+    "id": "item-1715000011",
+    "title": "Your Name (Kimi no Na wa)",
+    "type": "anime",
+    "releaseYear": 2016,
+    "genres": [
+      "Romance",
+      "Drama",
+      "Supernatural"
+    ],
+    "posterUrl": "https://cdn.myanimelist.net/images/anime/5/87048l.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "8.84"
+    },
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Sarah",
+    "socialContext": [
+      "With Partner"
+    ],
+    "dateExperienced": "2023-08-14",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Peak romance storytelling. The twilight sequence at the crater rim accompanied by RADWIMPS 'Sparkle' gave me chills and broke my heart.",
+    "createdAt": "2023-08-14T20:00:00.000Z",
+    "updatedAt": "2023-08-14T20:00:00.000Z"
+  },
+  {
+    "id": "item-1715000012",
+    "title": "Past Lives",
+    "type": "movie",
+    "releaseYear": 2023,
+    "genres": [
+      "Romance",
+      "Drama"
+    ],
+    "posterUrl": "https://image.tmdb.org/t/p/w500/k3waqVXSnvCZWfJYNtdamTgTtTA.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "7.8"
+    },
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-02-28",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "The final walk to the cab and Nora crying in Arthur's arms is devastatingly honest. An exploration of 'In-Yun' (destiny) that lingers for weeks.",
+    "createdAt": "2024-02-28T21:30:00.000Z",
+    "updatedAt": "2024-02-28T21:30:00.000Z"
+  },
+  {
+    "id": "item-1715000013",
+    "title": "Blade Runner 2049",
+    "type": "movie",
+    "releaseYear": 2017,
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Drama"
+    ],
+    "posterUrl": "https://m.media-amazon.com/images/M/MV5BNzA1Njg4NzYxOV5BMl5BanBnXkFtZTgwODk5NjU3MzI@._V1_SX300.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.0"
+    },
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-10-15",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Officer K's realization that he isn't the chosen one, yet choosing to die for something human anyway. 'Tears in the rain' echoing on the snowy steps.",
+    "createdAt": "2023-10-15T22:00:00.000Z",
+    "updatedAt": "2023-10-15T22:00:00.000Z"
+  },
+  {
+    "id": "item-1715000014",
+    "title": "Breaking Bad",
+    "type": "tv",
+    "releaseYear": 2008,
+    "genres": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "posterUrl": "https://static.tvmaze.com/uploads/images/original_untouched/501/1253519.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "9.5"
+    },
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Devon",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-07-10",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "The golden standard of character transformation. Walter White's slow moral decay is television perfection. 'Ozymandias' is the greatest episode ever filmed.",
+    "createdAt": "2023-07-10T18:00:00.000Z",
+    "updatedAt": "2023-07-10T18:00:00.000Z",
+    "tvDetails": {
+      "network": "AMC",
+      "totalEpisodes": 62,
+      "watchedEpisodes": 62,
+      "currentEpisode": "S05E16",
+      "rewatches": 1,
+      "seasons": [
+        {
+          "seasonNumber": 1,
+          "title": "Season 1",
+          "episodesCount": 7,
+          "watchedCount": 7,
+          "rating": 9.0
+        },
+        {
+          "seasonNumber": 2,
+          "title": "Season 2",
+          "episodesCount": 13,
+          "watchedCount": 13,
+          "rating": 9.2
+        },
+        {
+          "seasonNumber": 3,
+          "title": "Season 3",
+          "episodesCount": 13,
+          "watchedCount": 13,
+          "rating": 9.3
+        },
+        {
+          "seasonNumber": 4,
+          "title": "Season 4",
+          "episodesCount": 13,
+          "watchedCount": 13,
+          "rating": 9.8
+        },
+        {
+          "seasonNumber": 5,
+          "title": "Season 5",
+          "episodesCount": 16,
+          "watchedCount": 16,
+          "rating": 9.9
+        }
+      ]
+    }
+  },
+  {
+    "id": "item-1715000015",
+    "title": "Succession",
+    "type": "tv",
+    "releaseYear": 2018,
+    "genres": [
+      "Drama"
+    ],
+    "posterUrl": "https://static.tvmaze.com/uploads/images/original_untouched/453/1134275.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.9"
+    },
+    "status": "Completed",
+    "discoverySource": "Reddit / Forum",
+    "recommendedBy": "r/television",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-06-02",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Shakespearean tragedy disguised as corporate satire. Nicholas Britell's piano score and Jeremy Strong's portrayal of Kendall Roy are staggering.",
+    "createdAt": "2023-06-02T21:00:00.000Z",
+    "updatedAt": "2023-06-02T21:00:00.000Z",
+    "tvDetails": {
+      "network": "HBO",
+      "totalEpisodes": 39,
+      "watchedEpisodes": 39,
+      "currentEpisode": "S04E10",
+      "rewatches": 0,
+      "seasons": [
+        {
+          "seasonNumber": 1,
+          "title": "Season 1",
+          "episodesCount": 10,
+          "watchedCount": 10,
+          "rating": 8.8
+        },
+        {
+          "seasonNumber": 2,
+          "title": "Season 2",
+          "episodesCount": 10,
+          "watchedCount": 10,
+          "rating": 9.3
+        },
+        {
+          "seasonNumber": 3,
+          "title": "Season 3",
+          "episodesCount": 9,
+          "watchedCount": 9,
+          "rating": 9.2
+        },
+        {
+          "seasonNumber": 4,
+          "title": "Season 4",
+          "episodesCount": 10,
+          "watchedCount": 10,
+          "rating": 9.7
+        }
+      ]
+    }
+  },
+  {
+    "id": "item-1715000016",
+    "title": "Dune (Novel)",
+    "type": "book",
+    "releaseYear": 1965,
+    "genres": [
+      "Sci-Fi",
+      "Adventure",
+      "Philosophy"
+    ],
+    "posterUrl": "https://covers.openlibrary.org/b/id/11153217-L.jpg",
+    "externalScore": {
+      "source": "Goodreads",
+      "rating": "4.26"
+    },
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-02-10",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "Frank Herbert",
+      "pages": 688,
+      "format": "Paperback"
+    },
+    "review": "The world-building of Arrakis, the ecology, politics, and the Litany Against Fear are foundational literature. A masterwork of philosophical sci-fi.",
+    "createdAt": "2024-02-10T15:00:00.000Z",
+    "updatedAt": "2024-02-10T15:00:00.000Z"
+  },
+  {
+    "id": "item-1715000017",
+    "title": "Project Hail Mary",
+    "type": "book",
+    "releaseYear": 2021,
+    "genres": [
+      "Sci-Fi",
+      "Adventure"
+    ],
+    "posterUrl": "https://covers.openlibrary.org/b/id/10522030-L.jpg",
+    "externalScore": {
+      "source": "Goodreads",
+      "rating": "4.52"
+    },
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Alex",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-11-05",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "Andy Weir",
+      "pages": 496,
+      "format": "Hardcover"
+    },
+    "review": "A joy from start to finish. Rocky is one of the most endearing characters ever written in modern sci-fi. Amaze! Fist my bump!",
+    "createdAt": "2023-11-05T19:30:00.000Z",
+    "updatedAt": "2023-11-05T19:30:00.000Z"
+  },
+  {
+    "id": "item-1715000018",
+    "title": "Tomorrow, and Tomorrow, and Tomorrow",
+    "type": "book",
+    "releaseYear": 2022,
+    "genres": [
+      "Fiction",
+      "Drama",
+      "Romance"
+    ],
+    "posterUrl": "https://covers.openlibrary.org/b/id/12716104-L.jpg",
+    "externalScore": {
+      "source": "Goodreads",
+      "rating": "4.18"
+    },
+    "status": "Completed",
+    "discoverySource": "YouTube / TikTok",
+    "recommendedBy": "BookTok",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-01-25",
+    "metrics": {
+      "favorite": 4,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "Gabrielle Zevin",
+      "pages": 416,
+      "format": "Kindle / E-Book"
+    },
+    "review": "A gorgeous love letter to video game creation, creative partnership, and the quiet intimacy of lifelong friendship. Made me weep in chapter 8.",
+    "createdAt": "2024-01-25T17:00:00.000Z",
+    "updatedAt": "2024-01-25T17:00:00.000Z"
+  },
+  {
+    "id": "item-1715000019",
+    "title": "The Way of Kings",
+    "type": "book",
+    "releaseYear": 2010,
+    "genres": [
+      "Fantasy",
+      "Epic",
+      "Action"
+    ],
+    "posterUrl": "https://covers.openlibrary.org/b/id/12863795-L.jpg",
+    "externalScore": {
+      "source": "Goodreads",
+      "rating": "4.66"
+    },
+    "status": "In Progress",
+    "discoverySource": "Reddit / Forum",
+    "recommendedBy": "r/fantasy",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-05-10",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "Brandon Sanderson",
+      "pages": 1007,
+      "format": "Paperback"
+    },
+    "review": "Kaladin's journey through despair and Bridge Four's brotherhood is unmatched in fantasy world-building. Life before death, strength before weakness.",
+    "createdAt": "2024-05-10T20:00:00.000Z",
+    "updatedAt": "2024-05-10T20:00:00.000Z"
+  },
+  {
+    "id": "item-1715000020",
+    "title": "Andor",
+    "type": "tv",
+    "releaseYear": 2022,
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Thriller",
+      "Drama"
+    ],
+    "posterUrl": "https://static.tvmaze.com/uploads/images/original_untouched/564/1411766.jpg",
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.4"
+    },
+    "status": "Plan to Watch/Play",
+    "discoverySource": "Reddit / Forum",
+    "recommendedBy": "High acclaim for writing",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-06-01",
+    "metrics": {
+      "favorite": 4,
+      "enjoyment": 4,
+      "retention": 3,
+      "yapFactor": 4,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "On the top of my watchlist. Have heard Tony Gilroy's prison arc and Luthen's monologue are peak sci-fi television.",
+    "createdAt": "2024-06-01T12:00:00.000Z",
+    "updatedAt": "2024-06-01T12:00:00.000Z",
+    "tvDetails": {
+      "network": "Disney+",
+      "totalEpisodes": 12,
+      "watchedEpisodes": 12,
+      "currentEpisode": "S01E12",
+      "rewatches": 1,
+      "seasons": [
+        {
+          "seasonNumber": 1,
+          "title": "Season 1",
+          "episodesCount": 12,
+          "watchedCount": 12,
+          "rating": 9.2
+        }
+      ]
+    }
+  },
+  {
+    "id": "item-1715000021",
+    "title": "Chainsaw Man",
+    "type": "anime",
+    "releaseYear": 2022,
+    "genres": [
+      "Action",
+      "Supernatural",
+      "Gore"
+    ],
+    "posterUrl": "https://cdn.myanimelist.net/images/anime/1806/126216l.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "8.48"
+    },
+    "status": "Plan to Watch/Play",
+    "discoverySource": "YouTube / TikTok",
+    "recommendedBy": "Trending animations",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-06-02",
+    "metrics": {
+      "favorite": 4,
+      "enjoyment": 4,
+      "retention": 3,
+      "yapFactor": 3,
+      "characterInfluence": 3
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "Planning to binge Season 1 before the movie release.",
+    "createdAt": "2024-06-02T13:00:00.000Z",
+    "updatedAt": "2024-06-02T13:00:00.000Z"
+  },
+  {
+    "id": "item-1715000022",
+    "title": "Kinslayer: Metroid Dread",
+    "type": "game",
+    "releaseYear": 2021,
+    "genres": [
+      "Action",
+      "Sci-Fi",
+      "Platformer"
+    ],
+    "posterUrl": "https://images.igdb.com/igdb/image/upload/t_cover_big/co3911.jpg",
+    "externalScore": {
+      "source": "Metacritic",
+      "rating": "88"
+    },
+    "status": "Plan to Watch/Play",
+    "discoverySource": "Self-discovery",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-06-03",
+    "metrics": {
+      "favorite": 4,
+      "enjoyment": 4,
+      "retention": 3,
+      "yapFactor": 3,
+      "characterInfluence": 3
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "platform": "Switch",
+      "difficulty": "Dread",
+      "hoursPlayed": 24,
+      "timesFinished": 1,
+      "achievements": {
+        "unlocked": 100,
+        "total": 100
+      }
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0
+    },
+    "review": "On backlog queue for Nintendo Switch.",
+    "createdAt": "2024-06-03T10:00:00.000Z",
+    "updatedAt": "2024-06-03T10:00:00.000Z"
+  },
+  {
+    "id": "item-1715000030",
+    "title": "Attack on Titan",
+    "type": "anime",
+    "releaseYear": 2013,
+    "genres": [
+      "Action",
+      "Suspense",
+      "Drama"
+    ],
+    "posterUrl": "https://cdn.myanimelist.net/images/anime/10/47347l.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "8.55"
+    },
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "recommendedBy": "Alex",
+    "socialContext": [
+      "With Friends"
+    ],
+    "dateExperienced": "2023-11-04",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "review": "Eren Jaeger and the Scout Regiment. The basement reveal changed everything about narrative scope and freedom.",
+    "createdAt": "2023-11-04T22:00:00.000Z",
+    "updatedAt": "2023-11-04T22:00:00.000Z"
+  },
+  {
+    "id": "item-1715000031",
+    "title": "Steins;Gate",
+    "type": "anime",
+    "releaseYear": 2011,
+    "genres": [
+      "Sci-Fi",
+      "Thriller",
+      "Drama"
+    ],
+    "posterUrl": "https://cdn.myanimelist.net/images/anime/1935/127974l.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "9.07"
+    },
+    "status": "Completed",
+    "discoverySource": "Reddit / Forum",
+    "recommendedBy": "r/anime",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2023-05-18",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5,
+      "characterInfluence": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "review": "El Psy Kongroo. Okabe Rintarou suffering across countless worldlines to save Mayuri and Kurisu is peak sci-fi writing.",
+    "createdAt": "2023-05-18T19:00:00.000Z",
+    "updatedAt": "2023-05-18T19:00:00.000Z"
+  },
+  {
+    "id": "item-1715000032",
+    "title": "Jujutsu Kaisen",
+    "type": "anime",
+    "releaseYear": 2020,
+    "genres": [
+      "Action",
+      "Fantasy",
+      "Supernatural"
+    ],
+    "posterUrl": "https://cdn.myanimelist.net/images/anime/1171/109222l.jpg",
+    "externalScore": {
+      "source": "MAL",
+      "rating": "8.62"
+    },
+    "status": "In Progress",
+    "discoverySource": "YouTube / TikTok",
+    "recommendedBy": "Shibuya incident edits",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2024-03-01",
+    "metrics": {
+      "favorite": 4,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "review": "MAPPA went god-tier with the animation choreography. Gojo Satoru domain expansion and Sukuna vs Mahoraga were insane spectacles.",
+    "createdAt": "2024-03-01T21:00:00.000Z",
+    "updatedAt": "2024-03-01T21:00:00.000Z"
+  },
+  {
+    "id": "log-mov-oppenheimer",
+    "title": "Oppenheimer",
+    "type": "movie",
+    "releaseYear": 2023,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "socialContext": [
+      "Solo",
+      "In 70mm IMAX"
+    ],
+    "dateExperienced": "2023-08-04",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.9"
+    },
+    "genres": [
+      "Biography",
+      "Drama",
+      "History"
+    ],
+    "review": "A towering technical achievement in 70mm analog film. The Trinity countdown and courtroom tension were relentless."
+  },
+  {
+    "id": "log-mov-spiderverse",
+    "title": "Spider-Man: Across the Spider-Verse",
+    "type": "movie",
+    "releaseYear": 2023,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg",
+    "status": "Completed",
+    "discoverySource": "YouTube / TikTok",
+    "socialContext": [
+      "With Friends"
+    ],
+    "dateExperienced": "2023-06-12",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.7"
+    },
+    "genres": [
+      "Animation",
+      "Action",
+      "Sci-Fi"
+    ],
+    "review": "Every frame is a canvas of revolutionary comic book artistry and dimension-bending visual storytelling."
+  },
+  {
+    "id": "log-mov-eeao",
+    "title": "Everything Everywhere All at Once",
+    "type": "movie",
+    "releaseYear": 2022,
+    "posterUrl": "https://m.media-amazon.com/images/M/MV5BOWNmMzAzZmQtNDQ1NC00Nzk5LTkyMmUtNGI2N2NkOWM4MzEyXkEyXkFqcGc@._V1_QL75_UY562_CR4,0,380,562_.jpg",
+    "status": "Completed",
+    "discoverySource": "Reddit / Forum",
+    "socialContext": [
+      "With Family"
+    ],
+    "dateExperienced": "2022-05-20",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "7.8"
+    },
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Comedy"
+    ],
+    "review": "The googly eyes and the rock universe conversation broke me into genuine tears. Pure cinematic audacity with heart."
+  },
+  {
+    "id": "log-mov-whiplash",
+    "title": "Whiplash",
+    "type": "movie",
+    "releaseYear": 2014,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/7fn624j5lj3xTme2SgiLCeuedmO.jpg",
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2021-04-18",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.5"
+    },
+    "genres": [
+      "Drama",
+      "Music",
+      "Psychological"
+    ],
+    "review": "Electrifying editing and pulse-pounding rhythm. The final Caravan drum solo is unmatched intensity."
+  },
+  {
+    "id": "log-mov-inception",
+    "title": "Inception",
+    "type": "movie",
+    "releaseYear": 2010,
+    "posterUrl": "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg",
+    "status": "Completed",
+    "discoverySource": "Self-discovery",
+    "socialContext": [
+      "With Friends"
+    ],
+    "dateExperienced": "2019-11-10",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 5
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.8"
+    },
+    "genres": [
+      "Sci-Fi",
+      "Action",
+      "Thriller"
+    ],
+    "review": "Mind-bending dream-layer heist with Zimmer score that defined a decade of modern blockbuster filmmaking."
+  },
+  {
+    "id": "log-mov-lalaland",
+    "title": "La La Land",
+    "type": "movie",
+    "releaseYear": 2016,
+    "posterUrl": "https://m.media-amazon.com/images/M/MV5BMDllYjliOTUtMDJjZC00ODIzLWJmNGMtOWI2NzQxMjA2NzdlXkEyXkFqcGc@._V1_QL75_UX380_CR0,4,380,562_.jpg",
+    "status": "Completed",
+    "discoverySource": "Friend recommendation",
+    "socialContext": [
+      "With Partner"
+    ],
+    "dateExperienced": "2022-02-14",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 5,
+      "yapFactor": 4
+    },
+    "emotionalImpact": {
+      "cried": true
+    },
+    "externalScore": {
+      "source": "IMDb",
+      "rating": "8.0"
+    },
+    "genres": [
+      "Romance",
+      "Comedy",
+      "Music",
+      "Drama"
+    ],
+    "review": "That epilogue daydream montage made my eyes well up. An unforgettable bittersweet ode to dreamers."
+  }
+]

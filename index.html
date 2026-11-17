@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Log — Personal Distraction-Free Media Tracker</title>
+  <meta name="description" content="Personal databaseless media tracker for Movies, TV Shows, Anime, Video Games, and Books with cinematic showcases and custom personal metrics.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%238b5cf6'><path d='M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z'/></svg>">
+  <!-- Thematic Web Fonts for Manga, Gaming HUD, Cinema & Books -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Cinzel:wght@600;800&family=Share+Tech+Mono&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <script>
+    if (window.location.protocol === 'file:') {
+      window.addEventListener('DOMContentLoaded', () => {
+        const b = document.createElement('div');
+        b.style.cssText = 'background:#f59e0b; color:#000; padding:0.85rem 1rem; text-align:center; font-weight:700; font-family:sans-serif; font-size:0.95rem; z-index:99999; position:sticky; top:0; box-shadow:0 2px 10px rgba(0,0,0,0.5);';
+        b.innerHTML = '⚠️ Protocol Warning: You opened this file directly via <code>file://</code>. Modern browsers block ES module imports on file URLs. Please visit <a href="http://localhost:3000" target="_blank" style="color:#000; text-decoration:underline; font-weight:800;">http://localhost:3000</a> in your browser (server is active!).';
+        document.body.prepend(b);
+      });
+    }
+  </script>
+  <!-- Adaptive Ambient Backdrop (Dynamic Manga Color Shifting) -->
+  <div id="animeAmbientBackdrop" class="anime-ambient-backdrop" aria-hidden="true"></div>
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand" title="Return to Home Showcase">
+        <div class="brand-icon">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v20M2 12h20M4.93 4.93l14.14 14.14M4.93 19.07L19.07 4.93"/>
+          </svg>
+        </div>
+        <div class="brand-title">MEDIA<span>LOG</span></div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Main Navigation">
+        <button class="nav-tab-btn active" data-tab="home">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span>Home</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="movie">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+          <span>Movies</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="tv">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          <span>Shows</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="anime">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"></path></svg>
+          <span>Anime</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="game">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="6"></rect></svg>
+          <span>Games</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="book">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          <span>Books</span>
+        </button>
+        <button class="nav-tab-btn" data-tab="search">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>Search &amp; Add</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Public Admin Login button -->
+        <button id="btnAdminLogin" class="btn-admin-login" title="Login as Admin to add or edit entries">
+          <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>Admin</span>
+        </button>
+
+        <!-- Authenticated Admin Status Badge -->
+        <div id="adminLoggedBadge" class="admin-badge-logged" style="display: none;">
+          <span class="admin-dot"></span>
+          <span>Admin</span>
+          <button id="btnAdminLogout" class="btn-ghost-sm" title="Log out">Logout</button>
+        </div>
+
+        <!-- + Add Media Button -->
+        <button id="btnAddMedia" class="btn-primary-add" style="display: none;">
+          <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Add Media</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="container">
+
+    <!-- ============================================================= -->
+    <!-- VIEW 1: HOME SHOWCASE (Auto-Swiping Horizontal Rows)          -->
+    <!-- ============================================================= -->
+    <div id="homeView" class="home-section">
+      <!-- Hero Banner with Rotating Featured Memory on Right -->
+      <div class="home-hero-banner">
+        <div class="home-hero-text">
+          <h1>My Personal Media Odyssey</h1>
+          <p>
+            An intimate, distraction-free archive tracking my experiences across Movies, TV Series, Anime, Video Games, and Books. Powered by Git, custom emotional metrics, and zero algorithms.
+          </p>
+          <div class="home-hero-badges">
+            <button type="button" class="hero-chip-btn" data-nav="movie" data-filter="cry" title="Filter to Tear-Jerkers in Cinema Vault">
+              <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+              <span>Tear-Jerkers</span>
+            </button>
+            <button type="button" class="hero-chip-btn" data-nav="tv" title="Jump to TV Broadcast &amp; Dialogue Yap Factor">
+              <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+              <span>Yap Index</span>
+            </button>
+            <button type="button" class="hero-chip-btn" data-nav="anime" title="Jump to High Retention Manga &amp; Anime Panels">
+              <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-5.04z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-5.04z"></path></svg>
+              <span>Memory Retention</span>
+            </button>
+            <button type="button" class="hero-chip-btn" data-nav="game" title="Jump to Gaming HUD &amp; Clears">
+              <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="8" cy="12" r="1.5"></circle><circle cx="16" cy="12" r="1.5"></circle></svg>
+              <span>Gaming HUD</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Featured Memory (Rotating 5-Star Title on Empty Right Side) -->
+        <div class="home-hero-featured" id="heroFeaturedMemoryBox">
+          <div class="featured-memory-card" id="featuredMemoryCard">
+            <div class="featured-header">
+              <span class="featured-badge">
+                <svg class="svg-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                FEATURED MEMORY
+              </span>
+              <button type="button" id="btnShuffleMemory" class="btn-shuffle-memory" title="Shuffle a different 5-star memory">
+                <svg class="svg-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                <span>Shuffle</span>
+              </button>
+            </div>
+            <div class="featured-content" id="featuredMemoryContent">
+              <div class="featured-skeleton"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Stats Bar with Vector Icons & Clickable Pre-Filtered Navigation -->
+      <section class="stats-bar-section" aria-label="Media Statistics">
+        <div class="stats-grid">
+          <div class="stat-card clickable-stat" data-nav="search" title="Click to view all logged titles">
+            <div class="stat-icon purple">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+            </div>
+            <div class="stat-info">
+              <span id="statTotalItems" class="stat-value">0</span>
+              <span class="stat-label">Total Logged</span>
+              <div id="statCategoryBar" class="stat-category-split-bar" title="Category breakdown preview"></div>
+              <span id="statBreakdown" class="stat-subtext">Loading breakdown...</span>
+            </div>
+          </div>
+
+          <div class="stat-card clickable-stat" data-nav="game" data-status="Completed" title="Click to view completed games in Gaming section">
+            <div class="stat-icon emerald">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path><path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H7v4h10v-4h-2c-.55 0-1-.45-1-1v-2.34"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"></path></svg>
+            </div>
+            <div class="stat-info">
+              <span id="statGamesFinished" class="stat-value">0</span>
+              <span class="stat-label">Games Finished</span>
+              <span class="stat-subtext">Total clears logged</span>
+            </div>
+          </div>
+
+          <div class="stat-card clickable-stat" data-nav="game" title="Click to view gameplay hours breakdown in Gaming section">
+            <div class="stat-icon emerald">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <span id="statHoursPlayed" class="stat-value">0h</span>
+              <span class="stat-label">Hours Played</span>
+              <span id="statHoursDays" class="stat-subtext">~0 days logged</span>
+            </div>
+          </div>
+
+          <div class="stat-card clickable-stat" data-nav="movie" data-filter="cry" title="Click to filter titles that made me cry">
+            <div class="stat-icon cyan">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+            </div>
+            <div class="stat-info">
+              <span id="statCryCount" class="stat-value">0</span>
+              <span class="stat-label">Tear-Jerkers</span>
+              <span class="stat-subtext">Titles that made me cry</span>
+            </div>
+          </div>
+
+          <div class="stat-card clickable-stat" data-nav="movie" data-filter="fav5" title="Click to view 5-star masterpieces">
+            <div class="stat-icon amber">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            </div>
+            <div class="stat-info">
+              <span id="statFavorites" class="stat-value">0</span>
+              <span class="stat-label">Top Favorites</span>
+              <span class="stat-subtext">Rated 5/5 masterpieces</span>
+            </div>
+          </div>
+
+          <div class="stat-card clickable-stat" data-nav="tv" title="Click to view TV series &amp; broadcast guide">
+            <div class="stat-icon purple">
+              <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </div>
+            <div class="stat-info">
+              <span id="statYapAvg" class="stat-value">0.0/5</span>
+              <span class="stat-label">Avg Yap Factor</span>
+              <span class="stat-subtext">Evangelism rating</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Currently Watching & In Progress (Responsive Grid when <6, Carousel when >=6) -->
+      <section class="home-section-block" id="homeCurrentlySection" aria-label="Currently Watching and In Progress">
+        <div class="home-section-header">
+          <div class="section-title-group">
+            <h3 class="home-block-title">
+              <span style="color:#38bdf8;">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </span>
+              <span>Currently Watching &amp; In Progress</span>
+            </h3>
+            <span class="row-count-badge" id="currentlyCountBadge">0 titles</span>
+          </div>
+          <div class="row-nav-controls" id="currentlyNavControls" style="display:none;">
+            <button class="btn-row-nav" id="btnCurrentlyPrev" title="Scroll Left" aria-label="Previous">
+              <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="btn-row-nav" id="btnCurrentlyNext" title="Scroll Right" aria-label="Next">
+              <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+        <div id="currentlyTrackContainer" class="currently-track-container"></div>
+      </section>
+
+      <!-- This Year in Review (Vanilla SVG bar chart, rating distribution, category donut) -->
+      <section class="home-section-block" id="homeYearInReviewSection" aria-label="Year in Review Analytics">
+        <div class="home-section-header">
+          <div class="section-title-group">
+            <h3 class="home-block-title">
+              <span style="color:#a855f7;">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              </span>
+              <span>This Year in Review</span>
+            </h3>
+            <span class="row-count-badge" id="reviewYearBadge">2024</span>
+          </div>
+        </div>
+        <div class="review-charts-grid" id="reviewChartsGrid"></div>
+      </section>
+
+      <!-- Backlog Queue (Next 5 planned items with "Pick for me" random button) -->
+      <section class="home-section-block" id="homeBacklogSection" aria-label="Backlog Queue">
+        <div class="home-section-header">
+          <div class="section-title-group">
+            <h3 class="home-block-title">
+              <span style="color:#f59e0b;">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+              </span>
+              <span>Backlog Queue</span>
+            </h3>
+            <span class="row-count-badge" id="backlogCountBadge">Planned Next</span>
+          </div>
+          <button type="button" id="btnPickBacklog" class="btn-pick-random" title="Randomly pick one planned title to experience next">
+            <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><circle cx="15.5" cy="15.5" r="1.5"></circle></svg>
+            <span>Pick for Me</span>
+          </button>
+        </div>
+        <div id="backlogListContainer" class="backlog-cards-grid"></div>
+      </section>
+
+      <!-- On This Day (Titles finished on this date in past years; hidden if none) -->
+      <section class="home-section-block" id="homeOnThisDaySection" style="display:none;" aria-label="On This Day in Media History">
+        <div class="home-section-header">
+          <div class="section-title-group">
+            <h3 class="home-block-title">
+              <span style="color:#ec4899;">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline><path d="M16 2v4M8 2v4"></path></svg>
+              </span>
+              <span>On This Day</span>
+            </h3>
+            <span class="row-count-badge" id="onThisDayDateBadge">Anniversary</span>
+          </div>
+        </div>
+        <div id="onThisDayContainer" class="on-this-day-grid"></div>
+      </section>
+
+      <!-- Activity Heatmap (GitHub-style matrix of log dates) -->
+      <section class="home-section-block" id="homeHeatmapSection" aria-label="Activity Heatmap">
+        <div class="home-section-header">
+          <div class="section-title-group">
+            <h3 class="home-block-title">
+              <span style="color:#10b981;">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              </span>
+              <span>Activity Heatmap</span>
+            </h3>
+            <span class="row-count-badge">Past 16 Weeks</span>
+          </div>
+          <div class="heatmap-legend" aria-hidden="true">
+            <span>Less</span>
+            <span class="heat-square heat-0"></span>
+            <span class="heat-square heat-1"></span>
+            <span class="heat-square heat-2"></span>
+            <span class="heat-square heat-3"></span>
+            <span class="heat-square heat-4"></span>
+            <span>More</span>
+          </div>
+        </div>
+        <div id="heatmapGridContainer" class="heatmap-wrapper"></div>
+      </section>
+
+      <!-- Recently Watched & Experienced (Horizontal Strip with Category Filter Tabs) -->
+      <section class="home-section-block" id="homeRecentSection" aria-label="Recently Watched and Experienced">
+        <div class="home-section-header">
+          <div class="section-title-group">
+            <h3 class="home-block-title">
+              <span style="color:#8b5cf6;">
+                <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              </span>
+              <span>Recently Watched &amp; Experienced</span>
+            </h3>
+            <span class="row-count-badge" id="recentCategoryCountBadge">All Titles</span>
+          </div>
+          <!-- Category Filter Tab Row -->
+          <div class="recent-tabs-row" id="recentCategoryTabs" role="tablist" aria-label="Filter Recently Watched by Category">
+            <button type="button" class="recent-tab active" data-cat="all" role="tab" aria-selected="true">All</button>
+            <button type="button" class="recent-tab" data-cat="movie" role="tab" aria-selected="false">Movies</button>
+            <button type="button" class="recent-tab" data-cat="tv" role="tab" aria-selected="false">Shows</button>
+            <button type="button" class="recent-tab" data-cat="anime" role="tab" aria-selected="false">Anime</button>
+            <button type="button" class="recent-tab" data-cat="game" role="tab" aria-selected="false">Games</button>
+            <button type="button" class="recent-tab" data-cat="book" role="tab" aria-selected="false">Books</button>
+          </div>
+        </div>
+        <div id="recentlyWatchedTrack" class="horizontal-scroll-track" style="margin-top:0.75rem;"></div>
+      </section>
+
+      <!-- All-Time Thematic Horizontal Rows Container -->
+      <div id="homeRowsContainer" style="display: flex; flex-direction: column; gap: 2.25rem;"></div>
+    </div>
+
+
+    <!-- ============================================================= -->
+    <!-- VIEW 2: DEDICATED LIBRARY PAGES (Movies, Shows, Anime, Games, Books) -->
+    <!-- ============================================================= -->
+    <div id="dedicatedLibraryView" style="display: none; padding: 1.5rem 0 4rem 0;">
+      <!-- Page Header Strip -->
+      <div class="page-header-strip">
+        <div>
+          <h2 class="page-title"><span id="pageIcon"></span> <span id="pageTitleText">Movies</span></h2>
+          <p id="pageSubtitleText" class="page-subtitle">Personal ratings, reviews, and favorites in cinema.</p>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Bar -->
+      <section class="controls-section" aria-label="Library Controls">
+        <div class="controls-wrapper">
+          <div class="controls-row-top">
+            <div class="search-input-wrapper" style="max-width: 100%;">
+              <span class="search-icon">
+                <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              </span>
+              <input type="text" id="librarySearchInput" class="search-input" placeholder="Search title, thoughts, author, or notes...">
+              <button id="btnClearSearch" class="search-clear-btn" title="Clear search">✕</button>
+            </div>
+          </div>
+
+          <div class="controls-row-bottom">
+            <div class="filter-group">
+              <select id="filterStatus" class="select-control" aria-label="Filter by Status">
+                <option value="all">All Statuses</option>
+                <option value="Completed">Completed</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Plan to Watch/Play">Plan to Watch/Play/Read</option>
+                <option value="Dropped">Dropped</option>
+              </select>
+
+              <button id="btnFilterCry" class="btn-toggle-cry" title="Filter to show only titles that made you cry">
+                <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                <span>Made Me Cry</span>
+              </button>
+
+              <select id="filterSource" class="select-control" aria-label="Filter by Discovery Source">
+                <option value="all">All Discovery Sources</option>
+                <option value="Self-discovery">Self-discovery</option>
+                <option value="Friend recommendation">Friend recommendation</option>
+                <option value="YouTube / TikTok">YouTube / TikTok</option>
+                <option value="Reddit / Forum">Reddit / Forum</option>
+                <option value="Random browse">Random browse</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="sort-and-view">
+              <select id="selectSort" class="select-control" aria-label="Sort Media">
+                <option value="dateExperienced">Date Experienced (Newest)</option>
+                <option value="dateOldest">Date Experienced (Oldest)</option>
+                <option value="rating">Score / Rating (Highest MAL)</option>
+                <option value="yearNewest">Release Year (Newest)</option>
+                <option value="yearOldest">Release Year (Oldest)</option>
+                <option value="favorite">Favorite Level (Highest)</option>
+                <option value="yapFactor">Yap Factor (Most Yapped)</option>
+                <option value="retention">Memory Retention (Most Vivid)</option>
+                <option value="hoursPlayed">Hours Played (Most Hours)</option>
+                <option value="title">Title (A-Z)</option>
+              </select>
+
+              <div class="view-mode-toggle" title="Switch layout">
+                <button class="view-btn active" data-mode="grid" title="Poster Grid View">
+                  <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </button>
+                <button class="view-btn" data-mode="list" title="Compact List View">
+                  <svg class="svg-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </button>
+              </div>
+
+              <button id="btnSyncRepo" class="btn-ghost-sm" title="Sync repository data or export JSON backup" style="display:inline-flex; align-items:center; gap:0.35rem;">
+                <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Export / Sync</span>
+                <span id="syncRepoTimestamp" style="font-size:0.7rem; opacity:0.7; margin-left:0.2rem;">[Ready]</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TV Broadcast Channel Guide & Stats Strip (Dynamically shown on TV view) -->
+      <div id="tvGuideBar" class="tv-guide-container" style="display: none;">
+        <!-- Retro Broadcast Guide Strip -->
+        <div class="tv-guide-header">
+          <div class="tv-guide-left">
+            <span class="tv-signal-indicator">● LIVE NTSC BROADCAST</span>
+            <span class="tv-channel-guide-title">CHANNEL GUIDE &amp; EPISODE LOG</span>
+          </div>
+          <!-- TV Stats Strip -->
+          <div class="tv-stats-strip" id="tvStatsStrip">
+            <div class="tv-stat-pill" title="Total episodes watched">
+              <span class="tv-stat-val" id="tvStatEpisodes">0</span>
+              <span class="tv-stat-lbl">EPISODES</span>
+            </div>
+            <div class="tv-stat-pill" title="Total watch time in hours">
+              <span class="tv-stat-val" id="tvStatHours">0h</span>
+              <span class="tv-stat-lbl">RUNTIME</span>
+            </div>
+            <div class="tv-stat-pill" title="Completed series">
+              <span class="tv-stat-val" id="tvStatCompleted">0</span>
+              <span class="tv-stat-lbl">COMPLETED</span>
+            </div>
+            <div class="tv-stat-pill" title="Average IMDb rating">
+              <span class="tv-stat-val" id="tvStatRating">0.0</span>
+              <span class="tv-stat-lbl">AVG RATING</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TV Status Filters with Counts -->
+        <div class="tv-status-filters" id="tvStatusFilters">
+          <button type="button" class="tv-status-btn active" data-status="all">ALL CHANNELS <span class="tv-filter-count" id="tvCountAll">0</span></button>
+          <button type="button" class="tv-status-btn" data-status="In Progress">AIRING / WATCHING <span class="tv-filter-count" id="tvCountWatching">0</span></button>
+          <button type="button" class="tv-status-btn" data-status="Completed">ARCHIVED / COMPLETED <span class="tv-filter-count" id="tvCountCompleted">0</span></button>
+          <button type="button" class="tv-status-btn" data-status="Plan to Watch/Play">UPCOMING LINEUP <span class="tv-filter-count" id="tvCountPlan">0</span></button>
+          <button type="button" class="tv-status-btn" data-status="Dropped">OFF-AIR / DROPPED <span class="tv-filter-count" id="tvCountDropped">0</span></button>
+        </div>
+      </div>
+
+      <!-- Gaming HUD & Stats Strip (Dynamically shown on Game view) -->
+      <div id="gameHUDBar" class="game-hud-container" style="display: none;">
+        <!-- Top Stats HUD Strip -->
+        <div class="game-stats-hud-strip" id="gameStatsHUD">
+          <div class="game-hud-stat">
+            <span class="game-hud-stat-lbl">TOTAL LOGGED</span>
+            <span class="game-hud-stat-val" id="gameStatHours">0 HRS</span>
+          </div>
+          <div class="game-hud-stat">
+            <span class="game-hud-stat-lbl">CLEARS</span>
+            <span class="game-hud-stat-val" id="gameStatClears">0 RUNS</span>
+          </div>
+          <div class="game-hud-stat">
+            <span class="game-hud-stat-lbl">AVG METASCORE</span>
+            <span class="game-hud-stat-val" id="gameStatScore">0/100</span>
+          </div>
+          <div class="game-hud-stat">
+            <span class="game-hud-stat-lbl">TOP PLATFORM</span>
+            <span class="game-hud-stat-val" id="gameStatPlatform">PC</span>
+          </div>
+          <div class="game-hud-stat">
+            <span class="game-hud-stat-lbl">LONGEST ODYSSEY</span>
+            <span class="game-hud-stat-val" id="gameStatLongest">-</span>
+          </div>
+        </div>
+
+        <!-- Gaming Status Filter Tab Row with Counts -->
+        <div class="game-status-filters" id="gameStatusFilters">
+          <button type="button" class="game-status-tab active" data-status="all">[ALL QUESTS <span id="gameCountAll">0</span>]</button>
+          <button type="button" class="game-status-tab tab-inprogress" data-status="In Progress">[IN PROGRESS <span id="gameCountInProgress">0</span>]</button>
+          <button type="button" class="game-status-tab tab-completed" data-status="Completed">[COMPLETED <span id="gameCountCompleted">0</span>]</button>
+          <button type="button" class="game-status-tab tab-100" data-status="100">[100% CLEARED <span id="gameCount100">0</span>]</button>
+          <button type="button" class="game-status-tab tab-plan" data-status="Plan to Watch/Play">[BACKLOG <span id="gameCountPlan">0</span>]</button>
+          <button type="button" class="game-status-tab tab-dropped" data-status="Dropped">[DROPPED <span id="gameCountDropped">0</span>]</button>
+        </div>
+      </div>
+
+      <!-- Manga Genre Filter Bar (Dynamically shown on Anime view) -->
+      <div id="mangaGenreBar" class="manga-genre-bar" style="display: none;">
+        <span class="manga-genre-label">GENRE //</span>
+        <button class="manga-genre-btn active" data-genre="all">ALL</button>
+        <button class="manga-genre-btn" data-genre="Action">ACTION</button>
+        <button class="manga-genre-btn" data-genre="Fantasy">FANTASY</button>
+        <button class="manga-genre-btn" data-genre="Romance">ROMANCE</button>
+        <button class="manga-genre-btn" data-genre="Sci-Fi">SCI-FI</button>
+        <button class="manga-genre-btn" data-genre="Supernatural">SUPERNATURAL</button>
+        <button class="manga-genre-btn" data-genre="Drama">DRAMA</button>
+        <button class="manga-genre-btn" data-genre="Adventure">ADVENTURE</button>
+      </div>
+
+      <!-- Movie Cinema Genre Filter Bar (Dynamically shown on Movie view) -->
+      <div id="movieGenreBar" class="movie-genre-bar" style="display: none;">
+        <span class="movie-genre-label">
+          <svg class="svg-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          FILM GENRE //
+        </span>
+        <button class="movie-genre-btn active" data-genre="all">ALL FILMS</button>
+        <button class="movie-genre-btn" data-genre="Sci-Fi">SCI-FI</button>
+        <button class="movie-genre-btn" data-genre="Drama">DRAMA</button>
+        <button class="movie-genre-btn" data-genre="Romance">ROMANCE</button>
+        <button class="movie-genre-btn" data-genre="Action">ACTION</button>
+        <button class="movie-genre-btn" data-genre="Animation">ANIMATION</button>
+        <button class="movie-genre-btn" data-genre="Comedy">COMEDY</button>
+        <button class="movie-genre-btn" data-genre="Biography">BIOGRAPHY</button>
+        <button class="movie-genre-btn" data-genre="Music">MUSIC</button>
+      </div>
+
+      <!-- Media Display Section -->
+      <section class="media-section">
+        <div id="mediaContainer" class="media-grid"></div>
+      </section>
+    </div>
+
+
+    <!-- ============================================================= -->
+    <!-- VIEW 3: UNIFIED EXTERNAL SEARCH & ADD                         -->
+    <!-- ============================================================= -->
+    <div id="searchView" class="search-view-container" style="display: none;">
+      <div class="search-hero-box">
+        <div>
+          <h2 class="search-hero-title">Discover &amp; Log External Media</h2>
+          <p class="search-hero-subtitle">
+            Query live APIs for Movies/TV (TMDB/OMDb), Anime (MyAnimeList via Jikan), Video Games (RAWG), and Books (OpenLibrary) with cover posters, release dates, and scores.
+          </p>
+        </div>
+
+        <form id="externalSearchForm" class="search-bar-large">
+          <div class="search-type-selector">
+            <button type="button" class="search-type-btn active" data-type="movie">Movies</button>
+            <button type="button" class="search-type-btn" data-type="tv">TV Shows</button>
+            <button type="button" class="search-type-btn" data-type="anime">Anime (MAL)</button>
+            <button type="button" class="search-type-btn" data-type="game">Games</button>
+            <button type="button" class="search-type-btn" data-type="book">Books</button>
+          </div>
+
+          <input type="text" id="externalSearchInput" class="search-input-large" placeholder="Search title (e.g. Interstellar, Dune, Frieren, Elden Ring, 1984)...">
+          
+          <button type="submit" class="btn-search-submit">Search</button>
+        </form>
+
+        <div class="search-presets">
+          <span>Popular presets:</span>
+          <button type="button" class="preset-chip" data-query="Interstellar" data-type="movie">Interstellar</button>
+          <button type="button" class="preset-chip" data-query="Severance" data-type="tv">Severance</button>
+          <button type="button" class="preset-chip" data-query="Spirited Away" data-type="anime">Spirited Away</button>
+          <button type="button" class="preset-chip" data-query="Elden Ring" data-type="game">Elden Ring</button>
+          <button type="button" class="preset-chip" data-query="Dune" data-type="book">Dune (Novel)</button>
+          <button type="button" class="preset-chip" data-query="Project Hail Mary" data-type="book">Project Hail Mary</button>
+          
+          <button type="button" id="btnAddCustomMedia" class="preset-chip" style="color: var(--accent-primary); border-color: rgba(139, 92, 246, 0.4); margin-left: auto;">
+            + Add Custom Media Manually
+          </button>
+        </div>
+      </div>
+
+      <!-- External Search Results Grid -->
+      <div id="searchResultsContainer" class="search-results-grid"></div>
+    </div>
+
+  </main>
+
+
+  <!-- =============================================================== -->
+  <!-- MODAL 1: CUSTOM PERSONAL LOGGING MODAL                          -->
+  <!-- =============================================================== -->
+  <div id="logModal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="logModalTitle" class="modal-title">Log Media</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <form id="formLogMedia">
+        <div class="modal-body">
+          <input type="hidden" id="mediaId">
+
+          <!-- Basic Title & Poster -->
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label" for="mediaTitle">Title *</label>
+              <input type="text" id="mediaTitle" class="form-input" required placeholder="Title of media">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mediaType">Media Type</label>
+              <select id="mediaType" class="form-select">
+                <option value="movie">Movie</option>
+                <option value="tv">TV Show / Series</option>
+                <option value="anime">Anime</option>
+                <option value="game">Video Game</option>
+                <option value="book">Book</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label" for="mediaYear">Release / Publication Year</label>
+              <input type="number" id="mediaYear" class="form-input" min="1900" max="2099" placeholder="2024">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mediaPosterUrl">Cover Poster URL</label>
+              <input type="url" id="mediaPosterUrl" class="form-input" placeholder="https://image-url...">
+            </div>
+          </div>
+
+          <!-- External Score -->
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label" for="mediaExternalSource">Critic Score Source</label>
+              <input type="text" id="mediaExternalSource" class="form-input" placeholder="IMDb, MAL, Metacritic, Goodreads">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mediaExternalScore">Critic Rating</label>
+              <input type="text" id="mediaExternalScore" class="form-input" placeholder="e.g. 8.7, 96, or 4.5">
+            </div>
+          </div>
+
+          <!-- Personal Status -->
+          <div class="form-group">
+            <label class="form-label">Personal Status</label>
+            <div class="status-pill-options">
+              <button type="button" class="status-opt-btn active" data-val="Completed">Completed</button>
+              <button type="button" class="status-opt-btn" data-val="In Progress">In Progress</button>
+              <button type="button" class="status-opt-btn" data-val="Plan to Watch/Play">Plan to Watch/Play/Read</button>
+              <button type="button" class="status-opt-btn" data-val="Dropped">Dropped</button>
+            </div>
+          </div>
+
+          <!-- Discovery Source & Recommended By -->
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label" for="mediaDiscoverySource">Discovery Source</label>
+              <select id="mediaDiscoverySource" class="form-select">
+                <option value="Self-discovery">Self-discovery</option>
+                <option value="Friend recommendation">Friend recommendation</option>
+                <option value="YouTube / TikTok">YouTube / TikTok</option>
+                <option value="Reddit / Forum">Reddit / Forum</option>
+                <option value="Random browse">Random browse</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mediaRecommendedBy">Recommended by / Notes</label>
+              <input type="text" id="mediaRecommendedBy" class="form-input" placeholder="Friend's name, subreddit, channel">
+            </div>
+          </div>
+
+          <!-- Social Context & Date Experienced -->
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label">Social Context</label>
+              <div class="social-tag-options">
+                <button type="button" class="social-tag-btn active" data-val="Solo">Solo</button>
+                <button type="button" class="social-tag-btn" data-val="With Family">With Family</button>
+                <button type="button" class="social-tag-btn" data-val="With Friends">With Friends</button>
+                <button type="button" class="social-tag-btn" data-val="With Partner">With Partner</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="mediaDateExperienced">Date Experienced</label>
+              <input type="date" id="mediaDateExperienced" class="form-input">
+            </div>
+          </div>
+
+          <!-- Personal Metrics: Favorite (Stars), Enjoyment, Retention, Yap Factor -->
+          <div class="metric-slider-box">
+            <!-- Favorite Level -->
+            <div class="metric-control-item">
+              <div class="metric-header">
+                <span class="metric-title">Favorite Level (1–5)</span>
+                <input type="hidden" id="mediaFavoriteLevel" value="5">
+              </div>
+              <div class="star-selector" id="starSelectorGroup">
+                <button type="button" class="star-btn active" data-val="1">★</button>
+                <button type="button" class="star-btn active" data-val="2">★</button>
+                <button type="button" class="star-btn active" data-val="3">★</button>
+                <button type="button" class="star-btn active" data-val="4">★</button>
+                <button type="button" class="star-btn active" data-val="5">★</button>
+              </div>
+            </div>
+
+            <!-- Enjoyment -->
+            <div class="metric-control-item">
+              <div class="metric-header">
+                <span class="metric-title">Enjoyment</span>
+                <span id="valEnjoyment" class="metric-pill-display">5/5 • Peak Fiction</span>
+              </div>
+              <input type="range" id="sliderEnjoyment" class="metric-slider" min="1" max="5" step="1" value="5">
+              <div class="slider-ticks">
+                <span>1 (Regret)</span>
+                <span>3 (Solid)</span>
+                <span>5 (Peak)</span>
+              </div>
+            </div>
+
+            <!-- Memory Retention -->
+            <div class="metric-control-item">
+              <div class="metric-header">
+                <span class="metric-title">Memory Retention ("How much do I remember?")</span>
+                <span id="valRetention" class="metric-pill-display">4/5 • Vivid</span>
+              </div>
+              <input type="range" id="sliderRetention" class="metric-slider" min="1" max="5" step="1" value="4">
+              <div class="slider-ticks">
+                <span>1 (Blur)</span>
+                <span>3 (Key plots)</span>
+                <span>5 (Vivid detail)</span>
+              </div>
+            </div>
+
+            <!-- Yap Factor -->
+            <div class="metric-control-item">
+              <div class="metric-header">
+                <span class="metric-title">Yap Factor ("How much do I talk about this?")</span>
+                <span id="valYap" class="metric-pill-display">4/5 • Evangelist</span>
+              </div>
+              <input type="range" id="sliderYap" class="metric-slider" min="1" max="5" step="1" value="4">
+              <div class="slider-ticks">
+                <span>1 (Never)</span>
+                <span>3 (When asked)</span>
+                <span>5 (Yap God)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Emotional Impact: Did I Cry? -->
+          <div class="cry-toggle-box">
+            <div class="cry-label-group">
+              <span class="cry-icon-glow" style="display:flex; align-items:center; color:var(--accent-cyan);">
+                <svg class="svg-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+              </span>
+              <div>
+                <div style="font-weight:600; font-size:0.95rem;">Emotional Impact</div>
+                <div style="font-size:0.78rem; color:var(--text-muted);">Did this title make me cry?</div>
+              </div>
+            </div>
+            <label class="switch-control" for="toggleCried">
+              <input type="checkbox" id="toggleCried">
+              <span class="slider-switch"></span>
+            </label>
+          </div>
+
+          <!-- Video Game Specific Fields -->
+          <div id="gameFieldsSection" class="game-fields-container" style="display: none;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--accent-emerald); display:flex; align-items:center; gap:0.4rem;">
+              <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="6"></rect></svg>
+              <span>Video Game Statistics</span>
+            </div>
+            <div class="form-row-2col">
+              <div class="form-group">
+                <label class="form-label" for="gameHoursPlayed">Hours Played</label>
+                <input type="number" id="gameHoursPlayed" class="form-input" min="0" value="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Times Finished</label>
+                <div class="counter-input-group">
+                  <button type="button" id="btnCounterDec" class="btn-counter left">−</button>
+                  <input type="number" id="gameTimesFinished" class="counter-display" min="0" value="0">
+                  <button type="button" id="btnCounterInc" class="btn-counter right">+</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Book Specific Fields -->
+          <div id="bookFieldsSection" class="book-fields-container" style="display: none;">
+            <div style="font-size:0.85rem; font-weight:600; color:var(--accent-amber); display:flex; align-items:center; gap:0.4rem;">
+              <svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>Book Details</span>
+            </div>
+            <div class="form-row-2col">
+              <div class="form-group">
+                <label class="form-label" for="bookAuthor">Author</label>
+                <input type="text" id="bookAuthor" class="form-input" placeholder="e.g. Frank Herbert">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="bookPages">Page Count</label>
+                <input type="number" id="bookPages" class="form-input" min="0" placeholder="e.g. 680">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="bookFormat">Format</label>
+              <select id="bookFormat" class="form-select">
+                <option value="Paperback">Paperback</option>
+                <option value="Hardcover">Hardcover</option>
+                <option value="Kindle / E-Book">Kindle / E-Book</option>
+                <option value="Audiobook">Audiobook</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Personal Review & Notes -->
+          <div class="form-group">
+            <label class="form-label" for="mediaReview">Personal Review / Notes</label>
+            <textarea id="mediaReview" class="form-textarea" placeholder="Personal takeaways, character arcs, quotes, memorable scenes..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-ghost-sm modal-cancel-btn" style="padding:0.55rem 1rem;">Cancel</button>
+          <button type="submit" class="btn-primary-add" style="padding:0.55rem 1.35rem;">Save to Media Log</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- =============================================================== -->
+  <!-- MODAL 2: CARD DETAIL MODAL                                      -->
+  <!-- =============================================================== -->
+  <div id="detailModal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-box" style="max-width: 760px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Entry Details</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-modal-grid">
+          <div>
+            <img id="detailPoster" class="detail-poster-img" src="" alt="Poster">
+          </div>
+          <div class="detail-info-pane">
+            <div>
+              <div class="detail-badge-strip">
+                <span id="detailTypeBadge" class="card-type-badge type-movie">MOVIE</span>
+                <span id="detailStatusBadge" class="card-status-pill status-completed">Completed</span>
+                <span id="detailCryBadge" class="card-cry-badge" style="display: none; align-items:center; gap:0.25rem;">
+                  <svg class="svg-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+                  <span>Cried</span>
+                </span>
+              </div>
+              <h2 id="detailTitle" class="detail-title" style="margin-top:0.5rem;">Title</h2>
+              <div id="detailYear" style="color:var(--text-muted); font-size:0.9rem;">(2024)</div>
+            </div>
+
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.25rem;">
+              <span id="detailStars" style="color:#f59e0b; font-size:1.2rem;">★★★★★</span>
+              <span id="detailExternalScore" class="card-external-score">IMDb: 8.7</span>
+            </div>
+
+            <div class="detail-metrics-display">
+              <div>
+                <span class="metric-label-micro">Enjoyment</span>
+                <div id="detailEnjoyment" style="font-weight:600; font-size:0.85rem; color:#fff;">5/5</div>
+              </div>
+              <div>
+                <span class="metric-label-micro">Memory Retention</span>
+                <div id="detailRetention" style="font-weight:600; font-size:0.85rem; color:#fff;">4/5</div>
+              </div>
+              <div>
+                <span class="metric-label-micro">Yap Factor</span>
+                <div id="detailYap" style="font-weight:600; font-size:0.85rem; color:#fff;">4/5</div>
+              </div>
+              <div>
+                <span class="metric-label-micro">Discovery Source</span>
+                <div id="detailDiscovery" style="font-weight:600; font-size:0.85rem; color:#fff;">Self-discovery</div>
+              </div>
+              <div>
+                <span class="metric-label-micro">Social Context</span>
+                <div id="detailSocial" style="font-weight:600; font-size:0.85rem; color:#fff;">Solo</div>
+              </div>
+              <div>
+                <span class="metric-label-micro">Date Experienced</span>
+                <div id="detailDate" style="font-weight:600; font-size:0.85rem; color:#fff;">2024-03-22</div>
+              </div>
+            </div>
+
+            <div id="detailGameBlock" style="display:none; background:rgba(16,185,129,0.08); padding:0.75rem; border-radius:var(--radius-md); border:1px solid rgba(16,185,129,0.2);">
+              <div style="font-size:0.8rem; color:#34d399; font-weight:600; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.35rem;">
+                <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="6"></rect></svg>
+                <span>Game Details</span>
+              </div>
+              <div style="display:flex; gap:1.5rem; font-size:0.85rem;">
+                <div>Hours: <strong id="detailGameHours">0</strong></div>
+                <div>Clears: <strong id="detailGameFinished">0</strong></div>
+              </div>
+            </div>
+
+            <div id="detailBookBlock" style="display:none; background:rgba(245,158,11,0.08); padding:0.75rem; border-radius:var(--radius-md); border:1px solid rgba(245,158,11,0.2);">
+              <div style="font-size:0.8rem; color:#fbbf24; font-weight:600; margin-bottom:0.25rem; display:flex; align-items:center; gap:0.35rem;">
+                <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>Book Details</span>
+              </div>
+              <div style="display:flex; gap:1.5rem; font-size:0.85rem;">
+                <div>Author: <strong id="detailBookAuthor">Author</strong></div>
+                <div>Pages: <strong id="detailBookPages">0 pages</strong></div>
+                <div>Format: <strong id="detailBookFormat">Paperback</strong></div>
+              </div>
+            </div>
+
+            <div>
+              <span class="metric-label-micro">Personal Thoughts &amp; Review</span>
+              <p id="detailReview" class="detail-review-quote" style="margin-top:0.4rem;">No notes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div id="detailAdminActions" style="display:none; gap:0.5rem; margin-right:auto;">
+          <button id="btnDetailEdit" class="card-action-btn card-btn-edit" style="padding:0.45rem 0.85rem;">Edit Entry</button>
+          <button id="btnDetailDelete" class="card-action-btn card-btn-del" style="padding:0.45rem 0.85rem;">Delete Entry</button>
+        </div>
+        <button type="button" class="btn-ghost-sm modal-cancel-btn" style="padding:0.55rem 1rem;">Close</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =============================================================== -->
+  <!-- MODAL 3: ADMIN PASSWORD AUTH MODAL                              -->
+  <!-- =============================================================== -->
+  <div id="adminModal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-box" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Admin Authentication</h3>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <form id="formAdminLogin">
+        <div class="modal-body">
+          <p style="font-size:0.85rem; color:var(--text-muted);">
+            Enter your single-user Admin password to manage, add, edit, and delete entries.
+          </p>
+
+          <div class="form-group">
+            <label class="form-label" for="adminPasswordInput">Password</label>
+            <input type="password" id="adminPasswordInput" class="form-input" placeholder="Enter password" required autocomplete="current-password">
+          </div>
+
+          <div id="adminLoginError" style="display:none; color:#fb7185; font-size:0.8rem; background:rgba(244,63,94,0.1); padding:0.5rem; border-radius:var(--radius-sm);">
+            Invalid password
+          </div>
+
+          <div style="font-size:0.75rem; color:var(--text-dim); line-height:1.4;">
+            Single-user administrative session.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-ghost-sm modal-cancel-btn" style="padding:0.55rem 1rem;">Cancel</button>
+          <button type="submit" class="btn-primary-add" style="padding:0.55rem 1.35rem;">Log In</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =============================================================== -->
+  <!-- MODAL 4: FIX / UPDATE POSTER ART MODAL                          -->
+  <!-- =============================================================== -->
+  <div id="fixPosterModal" class="modal-overlay" aria-hidden="true" role="dialog" style="display:none;">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display:flex; align-items:center; gap:0.5rem;">
+          <svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span>Fix / Update Poster Art</span>
+        </h3>
+        <button id="btnCloseFixPoster" class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; gap:1.25rem; margin-bottom:1.25rem; align-items:flex-start;">
+          <div id="fixPosterPreviewBox" style="width:110px; flex-shrink:0; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border-medium); box-shadow:var(--shadow-sm); aspect-ratio:2/3; background:#111;"></div>
+          <div style="flex:1;">
+            <h4 id="fixPosterItemTitle" style="margin:0 0 0.35rem 0; font-size:1.05rem; font-weight:700;">Title</h4>
+            <span id="fixPosterItemType" style="display:inline-block; font-size:0.7rem; text-transform:uppercase; background:rgba(139,92,246,0.2); color:#c084fc; padding:0.15rem 0.5rem; border-radius:4px; margin-bottom:0.6rem; font-weight:600;">MOVIE</span>
+            <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.4; margin:0;">Paste a direct image URL, or auto-fetch candidate covers to save to this entry.</p>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0.75rem;">
+          <label for="fixPosterInputUrl" class="form-label">Poster Image URL:</label>
+          <div style="display:flex; gap:0.5rem;">
+            <input type="url" id="fixPosterInputUrl" class="form-input" placeholder="https://..." style="flex:1;">
+            <button type="button" id="btnPreviewPosterUrl" class="btn-ghost-sm" style="white-space:nowrap; padding:0.45rem 0.75rem;">Preview</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <button type="button" id="btnAutoFetchCovers" class="btn-ghost-sm" style="width:100%; display:flex; align-items:center; justify-content:center; gap:0.4rem; padding:0.55rem;">
+            <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Auto-Search Covers</span>
+          </button>
+        </div>
+
+        <div id="fixPosterCandidates" style="display:none; margin-bottom:1rem;">
+          <label class="form-label" style="font-size:0.75rem; margin-bottom:0.35rem; display:block;">Select Candidate Cover:</label>
+          <div id="fixPosterCandidateList" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.5rem; max-height:160px; overflow-y:auto; padding:0.25rem;"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnCancelFixPoster" class="btn-ghost-sm modal-cancel-btn">Cancel</button>
+        <button type="button" id="btnSaveFixedPoster" class="btn-primary-add" style="display:inline-flex; align-items:center; gap:0.35rem;">
+          <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Save Poster</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =============================================================== -->
+  <!-- MODAL 5: TV EPISODE TRACKER MODAL                               -->
+  <!-- =============================================================== -->
+  <div id="tvEpisodeModal" class="modal-overlay" aria-hidden="true" role="dialog" style="display:none;">
+    <div class="modal-box" style="max-width: 640px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="color:#60a5fa;"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg></span>
+          <h3 class="modal-title" id="tvModalTitle">Series Episode Tracker</h3>
+        </div>
+        <button id="btnCloseTVEpisodeModal" class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+      <div class="modal-body" style="padding-top:0.5rem;">
+        <div class="tv-modal-meta-bar" id="tvModalMetaBar"></div>
+        <div class="tv-seasons-accordion" id="tvSeasonsAccordion"></div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" id="btnQuickPlusOne" class="btn-ghost-sm" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">
+          +1 Watched Episode
+        </button>
+        <button type="button" id="btnDoneTVEpisodes" class="btn-primary-add" style="padding:0.5rem 1.25rem;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main Application Script (ES Module) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
