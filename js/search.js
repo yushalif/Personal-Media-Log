@@ -273,9 +273,43 @@ const FALLBACK_BOOKS = [
 ];
 
 export const searchService = {
+  isUrl(str) {
+    if (!str || typeof str !== 'string') return false;
+    const trimmed = str.trim();
+    return /^https?:\/\//i.test(trimmed) || 
+           /^www\./i.test(trimmed) ||
+           /^(store\.steampowered\.com|rottentomatoes\.com|imdb\.com|metacritic\.com|ign\.com|myanimelist\.net|openlibrary\.org|goodreads\.com)/i.test(trimmed);
+  },
+
+  async extractFromUrl(url) {
+    let cleanUrl = url.trim();
+    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+      cleanUrl = 'https://' + cleanUrl;
+    }
+
+    const res = await fetch(`/api/extract-url?url=${encodeURIComponent(cleanUrl)}`);
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || `Failed to extract metadata (${res.status})`);
+    }
+    const data = await res.json();
+    if (!data.ok || !data.item) {
+      throw new Error(data.error || 'Could not extract metadata from this link.');
+    }
+    return data;
+  },
+
   async search(query, category = 'movie') {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
+    const rawQuery = query.trim();
+    if (!rawQuery) return [];
+
+    // If query is an external review/media link, extract directly!
+    if (this.isUrl(rawQuery)) {
+      const extracted = await this.extractFromUrl(rawQuery);
+      return [extracted.item];
+    }
+
+    const q = rawQuery.toLowerCase();
 
     // 1. ANIME (Jikan API - MyAnimeList)
     if (category === 'anime') {

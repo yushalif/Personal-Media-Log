@@ -4090,3 +4090,115 @@ body.theme-anime .anime-ambient-backdrop {
   }
 }
 
+/* ===================================================================
+   Link Auto-Fill & Review Extraction Components
+   =================================================================== */
+.link-autofill-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(30, 27, 75, 0.3) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.link-autofill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.link-autofill-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #c4b5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.link-autofill-hint {
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.link-autofill-input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.form-input-sm {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.84rem;
+}
+
+.btn-extract-url {
+  padding: 0.5rem 1.15rem;
+  background: var(--accent-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.84rem;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-extract-url:hover:not(:disabled) {
+  background: #7c3aed;
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.45);
+}
+
+.btn-extract-url:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.extract-status-msg {
+  font-size: 0.78rem;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+.extract-status-msg.loading {
+  color: #93c5fd;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.extract-status-msg.success {
+  color: #86efac;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.extract-status-msg.error {
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.search-card-source-chip {
+  display: inline-block;
+  padding: 0.18rem 0.5rem;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #c4b5fd;
+  margin-bottom: 0.35rem;
+  width: fit-content;
+}
+

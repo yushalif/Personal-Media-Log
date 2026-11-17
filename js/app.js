@@ -548,6 +548,77 @@ class MediaLogApp {
     });
 
     // -----------------------------------------------------------------
+    // In-Modal Link Auto-Fill Extractor
+    // -----------------------------------------------------------------
+    const btnExtract = document.getElementById('btnExtractUrl');
+    const inputAutoFill = document.getElementById('inputAutoFillUrl');
+    const extractStatus = document.getElementById('extractStatusMsg');
+
+    const handleAutoFill = async () => {
+      const url = inputAutoFill ? inputAutoFill.value.trim() : '';
+      if (!url) {
+        if (extractStatus) {
+          extractStatus.style.display = 'block';
+          extractStatus.className = 'extract-status-msg error';
+          extractStatus.textContent = 'Please paste a valid review or media link.';
+        }
+        return;
+      }
+
+      btnExtract.disabled = true;
+      const origText = btnExtract.innerHTML;
+      btnExtract.innerHTML = '<span class="spinner-small"></span> Extracting...';
+      if (extractStatus) {
+        extractStatus.style.display = 'block';
+        extractStatus.className = 'extract-status-msg loading';
+        extractStatus.textContent = 'Contacting source and extracting metadata...';
+      }
+
+      try {
+        const data = await searchService.extractFromUrl(url);
+        const item = data.item;
+        if (item.title) document.getElementById('mediaTitle').value = item.title;
+        if (item.type) {
+          document.getElementById('mediaType').value = item.type;
+          document.getElementById('mediaType').dispatchEvent(new Event('change'));
+        }
+        if (item.releaseYear) document.getElementById('mediaYear').value = item.releaseYear;
+        if (item.posterUrl) document.getElementById('mediaPosterUrl').value = item.posterUrl;
+        if (item.externalScore?.source) document.getElementById('mediaExternalSource').value = item.externalScore.source;
+        if (item.externalScore?.rating) document.getElementById('mediaExternalScore').value = item.externalScore.rating;
+        if (item.discoverySource) document.getElementById('mediaDiscoverySource').value = item.discoverySource;
+        if (item.synopsis && !document.getElementById('mediaReview').value) {
+          document.getElementById('mediaReview').value = item.synopsis;
+        }
+
+        if (extractStatus) {
+          extractStatus.style.display = 'block';
+          extractStatus.className = 'extract-status-msg success';
+          extractStatus.textContent = `✓ Auto-filled from ${data.source || 'link'}! Review and save below.`;
+        }
+      } catch (err) {
+        if (extractStatus) {
+          extractStatus.style.display = 'block';
+          extractStatus.className = 'extract-status-msg error';
+          extractStatus.textContent = `Extraction error: ${err.message}`;
+        }
+      } finally {
+        btnExtract.disabled = false;
+        btnExtract.innerHTML = origText;
+      }
+    };
+
+    if (btnExtract) btnExtract.addEventListener('click', handleAutoFill);
+    if (inputAutoFill) {
+      inputAutoFill.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAutoFill();
+        }
+      });
+    }
+
+    // -----------------------------------------------------------------
     // Modal Form Interactive Controls
     // -----------------------------------------------------------------
     document.querySelectorAll('.status-opt-btn').forEach(btn => {
@@ -1334,6 +1405,7 @@ class MediaLogApp {
       return;
     }
 
+    const isUrl = searchService.isUrl(query);
     const container = document.getElementById('searchResultsContainer');
     if (container) {
       container.innerHTML = `
@@ -1341,13 +1413,22 @@ class MediaLogApp {
           <div style="font-size: 1.5rem; margin-bottom: 0.5rem; display:flex; justify-content:center;">
             ${icons.refresh(32, 'spin')}
           </div>
-          Searching ${this.searchViewCategory.toUpperCase()} catalog...
+          ${isUrl ? 'Extracting metadata from external review/media link...' : `Searching ${this.searchViewCategory.toUpperCase()} catalog...`}
         </div>
       `;
     }
 
     try {
       const results = await searchService.search(query, this.searchViewCategory);
+      if (isUrl && results.length > 0 && results[0].type) {
+        // Sync active search category button if extracted item is game, tv, anime, book
+        const extractedType = results[0].type;
+        document.querySelectorAll('.search-type-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-type') === extractedType);
+        });
+        this.searchViewCategory = extractedType;
+      }
+
       ui.renderSearchResults(results, api.isAdmin(), (item) => {
         ui.openLogModal(item);
       });
@@ -1358,7 +1439,7 @@ class MediaLogApp {
             <div class="empty-icon" style="color:var(--text-dim); display:flex; justify-content:center; margin-bottom:1rem;">
               ${icons.alertCircle(44)}
             </div>
-            <h3 class="empty-title">Search Error</h3>
+            <h3 class="empty-title">${isUrl ? 'Link Extraction Failed' : 'Search Error'}</h3>
             <p class="empty-desc">${err.message || 'Could not fetch external results.'}</p>
           </div>
         `;

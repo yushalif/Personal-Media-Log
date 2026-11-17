@@ -12,6 +12,7 @@ import json
 import base64
 import time
 import socket
+import re
 import urllib.request
 import urllib.parse
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
@@ -92,6 +93,10 @@ class MediaLogHandler(SimpleHTTPRequestHandler):
             self.handle_search_media(parsed.query)
             return
 
+        if path == "/api/extract-url":
+            self.handle_extract_url(parsed.query)
+            return
+
         # Default static file handler
         return super().do_GET()
 
@@ -111,6 +116,8 @@ class MediaLogHandler(SimpleHTTPRequestHandler):
             self.handle_auth(body)
         elif path == "/api/save-media":
             self.handle_save_media(body)
+        elif path == "/api/extract-url":
+            self.handle_extract_url_post(body)
         else:
             self.send_error(404, "Endpoint not found")
 
@@ -486,6 +493,361 @@ class MediaLogHandler(SimpleHTTPRequestHandler):
             "apiKeyMissing": True,
             "message": f"External API key for {mtype} not configured in environment. Client fallback active."
         })
+
+    def handle_extract_url(self, query_string):
+        params = urllib.parse.parse_qs(query_string)
+        url = params.get("url", [""])[0]
+        if not url:
+            self.send_json(400, {"ok": False, "error": "URL parameter required"})
+            return
+        result = self.extract_metadata_from_url(url)
+        self.send_json(200 if result.get("ok") else 500, result)
+
+    def handle_extract_url_post(self, body):
+        url = body.get("url", "")
+        if not url:
+            self.send_json(400, {"ok": False, "error": "URL parameter required"})
+            return
+        result = self.extract_metadata_from_url(url)
+        self.send_json(200 if result.get("ok") else 500, result)
+
+    def extract_metadata_from_url(self, target_url):
+        target_url = target_url.strip()
+        if not target_url.startswith("http://") and not target_url.startswith("https://"):
+            target_url = "https://" + target_url
+
+        lower_url = target_url.lower()
+
+        try:
+            # 1. Steam Store URL
+            steam_match = re.search(r"store\.steampowered\.com/app/(\d+)", target_url, re.I)
+            if steam_match:
+                app_id = steam_match.group(1)
+                api_url = f"https://store.steampowered.com/api/appdetails?appids={app_id}&l=english"
+                try:
+                    req = urllib.request.Request(api_url, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req, timeout=5) as r:
+                        s_data = json.loads(r.read().decode())
+                        app_info = s_data.get(app_id, {}).get("data")
+                        if app_info:
+                            poster = f"https://cdn.akamai.steamstatic.com/steam/apps/{app_id}/library_600x900_2x.jpg"
+                            rel_str = app_info.get("release_date", {}).get("date", "")
+                            y_match = re.search(r"\b(19\d\d|20\d\d)\b", rel_str)
+                            year = int(y_match.group(1)) if y_match else None
+                            meta = app_info.get("metacritic", {}).get("score")
+                            genres = [g.get("description") for g in app_info.get("genres", []) if g.get("description")]
+                            return {
+                                "ok": True,
+                                "source": "Steam",
+                                "item": {
+                                    "id": f"steam-{app_id}",
+                                    "title": app_info.get("name"),
+                                    "type": "game",
+                                    "releaseYear": year,
+                                    "posterUrl": poster,
+                                    "externalScore": {
+                                        "source": "Metacritic" if meta else "Steam",
+                                        "rating": str(meta) if meta else "Verified"
+                                    },
+                                    "synopsis": app_info.get("short_description", ""),
+                                    "genres": genres,
+                                    "platforms": ["PC"],
+                                    "gameDetails": { "hoursPlayed": 0, "timesFinished": 0 },
+                                    "discoverySource": "Review link (Steam)",
+                                    "sourceUrl": target_url
+                                }
+                            }
+                except Exception as e:
+                    print(f"Steam API error: {e}")
+
+            # 2. MyAnimeList URL
+            mal_match = re.search(r"myanimelist\.net/anime/(\d+)", target_url, re.I)
+            if mal_match:
+                mal_id = mal_match.group(1)
+                api_url = f"https://api.jikan.moe/v4/anime/{mal_id}"
+                try:
+                    req = urllib.request.Request(api_url, headers={"User-Agent": "MediaLogApp/1.0"})
+                    with urllib.request.urlopen(req, timeout=5) as r:
+                        j_data = json.loads(r.read().decode())
+                        anime = j_data.get("data")
+                        if anime:
+                            year = anime.get("year")
+                            if not year and anime.get("aired", {}).get("from"):
+                                y_match = re.search(r"\b(19\d\d|20\d\d)\b", anime.get("aired", {}).get("from", ""))
+                                if y_match: year = int(y_match.group(1))
+                            poster = anime.get("images", {}).get("webp", {}).get("large_image_url") or anime.get("images", {}).get("jpg", {}).get("large_image_url") or ""
+                            genres = [g.get("name") for g in anime.get("genres", []) if g.get("name")]
+                            return {
+                                "ok": True,
+                                "source": "MyAnimeList",
+                                "item": {
+                                    "id": f"mal-{mal_id}",
+                                    "title": anime.get("title_english") or anime.get("title"),
+                                    "originalTitle": anime.get("title"),
+                                    "type": "anime",
+                                    "releaseYear": year,
+                                    "posterUrl": poster,
+                                    "externalScore": {
+                                        "source": "MAL",
+                                        "rating": str(anime.get("score")) if anime.get("score") else "N/A"
+                                    },
+                                    "synopsis": anime.get("synopsis", ""),
+                                    "genres": genres,
+                                    "discoverySource": "Review link (MyAnimeList)",
+                                    "sourceUrl": target_url
+                                }
+                            }
+                except Exception as e:
+                    print(f"MAL error: {e}")
+
+            # 3. IMDb URL (extract title, year, poster, ratings)
+            imdb_match = re.search(r"imdb\.com/title/(tt\d+)", target_url, re.I)
+            if imdb_match:
+                imdb_id = imdb_match.group(1)
+                omdb_url = f"http://www.omdbapi.com/?i={imdb_id}&apikey={OMDB_API_KEY or 'trilogy'}"
+                try:
+                    req = urllib.request.Request(omdb_url, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req, timeout=4) as r:
+                        om_data = json.loads(r.read().decode())
+                        if om_data.get("Response") == "True":
+                            y_match = re.search(r"\b(19\d\d|20\d\d)\b", om_data.get("Year", ""))
+                            year = int(y_match.group(1)) if y_match else None
+                            media_type = "tv" if om_data.get("Type") == "series" else "movie"
+                            rating = om_data.get("imdbRating", "N/A")
+                            poster = om_data.get("Poster") if om_data.get("Poster") != "N/A" else ""
+                            genres = [g.strip() for g in om_data.get("Genre", "").split(",") if g.strip()]
+                            return {
+                                "ok": True,
+                                "source": "IMDb",
+                                "item": {
+                                    "id": f"imdb-{imdb_id}",
+                                    "title": om_data.get("Title"),
+                                    "type": media_type,
+                                    "releaseYear": year,
+                                    "posterUrl": poster,
+                                    "externalScore": { "source": "IMDb", "rating": rating },
+                                    "synopsis": om_data.get("Plot", ""),
+                                    "genres": genres,
+                                    "discoverySource": "Review link (IMDb)",
+                                    "sourceUrl": target_url
+                                }
+                            }
+                except Exception:
+                    pass
+
+                try:
+                    sugg_url = f"https://v2.sg.media-imdb.com/suggestion/t/{imdb_id}.json"
+                    req = urllib.request.Request(sugg_url, headers={"User-Agent": "Mozilla/5.0"})
+                    with urllib.request.urlopen(req, timeout=4) as r:
+                        s_data = json.loads(r.read().decode())
+                        items = s_data.get("d", [])
+                        if items:
+                            it = items[0]
+                            poster = it.get("i", {}).get("imageUrl", "")
+                            media_type = "tv" if "tv" in it.get("qid", "").lower() else "movie"
+                            return {
+                                "ok": True,
+                                "source": "IMDb",
+                                "item": {
+                                    "id": f"imdb-{imdb_id}",
+                                    "title": it.get("l"),
+                                    "type": media_type,
+                                    "releaseYear": it.get("y"),
+                                    "posterUrl": poster,
+                                    "externalScore": { "source": "IMDb", "rating": "8.0" },
+                                    "synopsis": f"Starring {it.get('s', '')}" if it.get('s') else "",
+                                    "discoverySource": "Review link (IMDb)",
+                                    "sourceUrl": target_url
+                                }
+                            }
+                except Exception as e:
+                    print(f"IMDb suggestion error: {e}")
+
+            # 4. OpenLibrary URL
+            ol_match = re.search(r"openlibrary\.org/(works|books)/([A-Za-z0-9]+)", target_url, re.I)
+            if ol_match:
+                type_key = ol_match.group(1)
+                ol_id = ol_match.group(2)
+                api_url = f"https://openlibrary.org/{type_key}/{ol_id}.json"
+                try:
+                    req = urllib.request.Request(api_url, headers={"User-Agent": "MediaLogApp/1.0"})
+                    with urllib.request.urlopen(req, timeout=4) as r:
+                        ol_data = json.loads(r.read().decode())
+                        covers = ol_data.get("covers")
+                        cover_id = covers[0] if isinstance(covers, list) and covers else None
+                        poster = f"https://covers.openlibrary.org/b/id/{cover_id}-L.jpg" if cover_id else ""
+                        desc = ol_data.get("description", "")
+                        if isinstance(desc, dict): desc = desc.get("value", "")
+                        y_str = ol_data.get("first_publish_date", "")
+                        y_m = re.search(r"\b(19\d\d|20\d\d)\b", y_str)
+                        year = int(y_m.group(1)) if y_m else None
+                        return {
+                            "ok": True,
+                            "source": "OpenLibrary",
+                            "item": {
+                                "id": f"book-{ol_id}",
+                                "title": ol_data.get("title"),
+                                "type": "book",
+                                "releaseYear": year,
+                                "posterUrl": poster,
+                                "externalScore": { "source": "OpenLibrary", "rating": "4.0" },
+                                "synopsis": desc,
+                                "bookDetails": { "author": "Author", "pages": 350, "format": "Paperback" },
+                                "discoverySource": "Review link (OpenLibrary)",
+                                "sourceUrl": target_url
+                            }
+                        }
+                except Exception as e:
+                    print(f"OpenLibrary error: {e}")
+
+            # 5. Universal Scraper (Rotten Tomatoes, Metacritic, IGN, Google, Goodreads, etc.)
+            req = urllib.request.Request(target_url, headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9"
+            })
+
+            with urllib.request.urlopen(req, timeout=6) as resp:
+                html = resp.read().decode("utf-8", errors="ignore")
+
+            site_name = "Review Link"
+            if "rottentomatoes.com" in lower_url: site_name = "Rotten Tomatoes"
+            elif "metacritic.com" in lower_url: site_name = "Metacritic"
+            elif "ign.com" in lower_url: site_name = "IGN"
+            elif "goodreads.com" in lower_url: site_name = "Goodreads"
+            elif "google.com" in lower_url: site_name = "Google"
+
+            title = ""
+            poster_url = ""
+            synopsis = ""
+            rating = "N/A"
+            media_type = "movie"
+            year = None
+            genres = []
+
+            # Check JSON-LD
+            ld_matches = re.findall(r'<script[^>]*type=["\']application/ld\+json["\'][^>]*>(.*?)</script>', html, re.DOTALL | re.I)
+            for block in ld_matches:
+                try:
+                    ld_obj = json.loads(block.strip())
+                    items = ld_obj if isinstance(ld_obj, list) else [ld_obj]
+                    for d in items:
+                        if not isinstance(d, dict): continue
+                        schema_type = str(d.get("@type", "")).lower()
+                        if any(t in schema_type for t in ["movie", "tvseries", "videogame", "book", "creativework", "product"]):
+                            if not title and (d.get("name") or d.get("headline")):
+                                title = d.get("name") or d.get("headline")
+                            if not poster_url and d.get("image"):
+                                img = d.get("image")
+                                poster_url = img if isinstance(img, str) else (img.get("url") if isinstance(img, dict) else "")
+                            if not synopsis and d.get("description"):
+                                synopsis = d.get("description")
+                            if d.get("genre"):
+                                g = d.get("genre")
+                                genres = g if isinstance(g, list) else [str(g)]
+                            agg = d.get("aggregateRating")
+                            if isinstance(agg, dict) and agg.get("ratingValue"):
+                                val = str(agg.get("ratingValue"))
+                                best = str(agg.get("bestRating") or "")
+                                if "rottentomatoes" in lower_url:
+                                    rating = f"{val}%"
+                                elif best == "100" or int(float(val)) > 10:
+                                    rating = f"{val}/100"
+                                else:
+                                    rating = f"{val}/10"
+                            if "videogame" in schema_type: media_type = "game"
+                            elif "tvseries" in schema_type: media_type = "tv"
+                            elif "book" in schema_type: media_type = "book"
+                            elif "movie" in schema_type: media_type = "movie"
+                            if d.get("datePublished"):
+                                ym = re.search(r"\b(19\d\d|20\d\d)\b", str(d.get("datePublished")))
+                                if ym: year = int(ym.group(1))
+                            break
+                except Exception:
+                    pass
+
+            if not title:
+                og_t = re.search(r'<meta[^>]*property=["\']og:title["\'][^>]*content=["\']([^"\']+)["\']', html, re.I)
+                if not og_t:
+                    og_t = re.search(r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:title["\']', html, re.I)
+                if og_t:
+                    title = og_t.group(1)
+                else:
+                    t_tag = re.search(r'<title>([^<]+)</title>', html, re.I)
+                    title = t_tag.group(1) if t_tag else "Extracted Media"
+
+            if not poster_url:
+                og_img = re.search(r'<meta[^>]*property=["\']og:image["\'][^>]*content=["\']([^"\']+)["\']', html, re.I)
+                if not og_img:
+                    og_img = re.search(r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:image["\']', html, re.I)
+                if not og_img:
+                    og_img = re.search(r'<meta[^>]*name=["\']twitter:image["\'][^>]*content=["\']([^"\']+)["\']', html, re.I)
+                if og_img:
+                    poster_url = og_img.group(1)
+
+            if not synopsis:
+                og_d = re.search(r'<meta[^>]*property=["\']og:description["\'][^>]*content=["\']([^"\']+)["\']', html, re.I)
+                if not og_d:
+                    og_d = re.search(r'<meta[^>]*content=["\']([^"\']+)["\'][^>]*property=["\']og:description["\']', html, re.I)
+                if og_d:
+                    synopsis = og_d.group(1)
+
+            # Clean title
+            title = re.sub(r'\s*\|\s*(Rotten Tomatoes|Metacritic|IGN|IMDb|Goodreads).*$', '', title, flags=re.I)
+            title = re.sub(r'\s*-\s*Rotten Tomatoes.*$', '', title, flags=re.I)
+            title = re.sub(r'\s*-\s*IMDb.*$', '', title, flags=re.I)
+            title = re.sub(r'\s*Reviews?\s*-\s*Metacritic.*$', '', title, flags=re.I)
+            title = title.strip()
+
+            if not year:
+                ym = re.search(r'\((\d{4})\)', title) or re.search(r'\b(19\d\d|20\d\d)\b', target_url)
+                if ym: year = int(ym.group(1))
+            title = re.sub(r'\s*\(\d{4}\)', '', title).strip()
+
+            if media_type == "movie":
+                if any(w in lower_url for w in ["/game/", "/games/", "ign.com/games", "metacritic.com/game"]):
+                    media_type = "game"
+                elif any(w in lower_url for w in ["/tv/", "/shows/", "tvmaze", "ign.com/tv", "metacritic.com/tv"]):
+                    media_type = "tv"
+                elif any(w in lower_url for w in ["/anime/", "myanimelist", "kitsu.io"]):
+                    media_type = "anime"
+                elif any(w in lower_url for w in ["/book/", "/books/", "goodreads", "openlibrary"]):
+                    media_type = "book"
+
+            if rating == "N/A" and synopsis:
+                meta_m = re.search(r'Metascore\s*(\d{1,3})\b', synopsis, re.I)
+                pct_m = re.search(r'(\d{1,3})%', synopsis)
+                ten_m = re.search(r'(\d{1,2}(?:\.\d)?)\/10\b', synopsis)
+                if meta_m: rating = f"{meta_m.group(1)}/100"
+                elif pct_m: rating = f"{pct_m.group(1)}%"
+                elif ten_m: rating = f"{ten_m.group(1)}/10"
+
+            return {
+                "ok": True,
+                "source": site_name,
+                "item": {
+                    "id": f"extracted-{int(time.time() * 1000)}",
+                    "title": title or "Extracted Media",
+                    "type": media_type,
+                    "releaseYear": year,
+                    "posterUrl": poster_url,
+                    "externalScore": {
+                        "source": site_name,
+                        "rating": rating
+                    },
+                    "synopsis": synopsis or "",
+                    "genres": genres,
+                    "discoverySource": f"Review link ({site_name})",
+                    "sourceUrl": target_url
+                }
+            }
+
+        except Exception as err:
+            print(f"Extraction error for {target_url}: {err}")
+            return {
+                "ok": False,
+                "error": str(err) or "Could not extract metadata from this link"
+            }
 
     def send_json(self, status, payload):
         body = json.dumps(payload).encode("utf-8")

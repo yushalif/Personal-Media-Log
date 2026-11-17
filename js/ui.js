@@ -2333,11 +2333,15 @@ export const ui = {
       const score = item.externalScore?.rating && item.externalScore.rating !== 'N/A' 
         ? `${item.externalScore.source}: ${item.externalScore.rating}`
         : '';
+      const sourceChip = item.discoverySource 
+        ? `<div class="search-card-source-chip">${this.escapeHtml(item.discoverySource.replace('Review link (', '').replace(')', ''))}</div>`
+        : '';
 
       return `
         <div class="search-result-card" data-title="${this.escapeHtml(item.title)}">
           ${this.createPosterHTML(item, { aspectRatio: '2/3', imgClass: 'search-card-poster' })}
           <div class="search-card-body">
+            ${sourceChip}
             <h4 class="search-card-title">${this.escapeHtml(item.title)}</h4>
             <div class="search-card-meta">
               <span>${year}</span>
@@ -2379,10 +2383,19 @@ export const ui = {
     const modal = document.getElementById('logModal');
     if (!modal) return;
 
-    const isEdit = Boolean(item && item.id);
+    // Reset URL auto-fill inputs
+    const inputUrl = document.getElementById('inputAutoFillUrl');
+    if (inputUrl) inputUrl.value = item?.sourceUrl || '';
+    const statusMsg = document.getElementById('extractStatusMsg');
+    if (statusMsg) {
+      statusMsg.style.display = 'none';
+      statusMsg.textContent = '';
+    }
+
+    const isEdit = Boolean(item && item.createdAt);
     document.getElementById('logModalTitle').textContent = isEdit ? 'Edit Media Entry' : 'Log New Media';
 
-    document.getElementById('mediaId').value = item?.id || '';
+    document.getElementById('mediaId').value = isEdit ? (item?.id || '') : '';
     document.getElementById('mediaTitle').value = item?.title || '';
     document.getElementById('mediaType').value = item?.type || 'movie';
     document.getElementById('mediaYear').value = item?.releaseYear || new Date().getFullYear();
@@ -2437,7 +2450,7 @@ export const ui = {
     document.getElementById('bookPages').value = item?.bookDetails?.pages || item?.pages || 0;
     document.getElementById('bookFormat').value = item?.bookDetails?.format || 'Paperback';
 
-    document.getElementById('mediaReview').value = item?.review || '';
+    document.getElementById('mediaReview').value = item?.review || item?.synopsis || '';
 
     modal.classList.add('active');
   },

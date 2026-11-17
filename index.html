@@ -559,7 +559,7 @@
         <div>
           <h2 class="search-hero-title">Discover &amp; Log External Media</h2>
           <p class="search-hero-subtitle">
-            Query live APIs for Movies/TV (TMDB/OMDb), Anime (MyAnimeList via Jikan), Video Games (RAWG), and Books (OpenLibrary) with cover posters, release dates, and scores.
+            Search titles or paste review links from Rotten Tomatoes, IMDb, Metacritic, IGN, Steam, MAL, and Goodreads to auto-extract details and log instantly.
           </p>
         </div>
 
@@ -572,9 +572,9 @@
             <button type="button" class="search-type-btn" data-type="book">Books</button>
           </div>
 
-          <input type="text" id="externalSearchInput" class="search-input-large" placeholder="Search title (e.g. Interstellar, Dune, Frieren, Elden Ring, 1984)...">
+          <input type="text" id="externalSearchInput" class="search-input-large" placeholder="Search title or paste link (Rotten Tomatoes, IMDb, Metacritic, IGN, Steam, MAL)...">
           
-          <button type="submit" class="btn-search-submit">Search</button>
+          <button type="submit" class="btn-search-submit">Search / Extract</button>
         </form>
 
         <div class="search-presets">
@@ -583,8 +583,9 @@
           <button type="button" class="preset-chip" data-query="Severance" data-type="tv">Severance</button>
           <button type="button" class="preset-chip" data-query="Spirited Away" data-type="anime">Spirited Away</button>
           <button type="button" class="preset-chip" data-query="Elden Ring" data-type="game">Elden Ring</button>
-          <button type="button" class="preset-chip" data-query="Dune" data-type="book">Dune (Novel)</button>
-          <button type="button" class="preset-chip" data-query="Project Hail Mary" data-type="book">Project Hail Mary</button>
+          <button type="button" class="preset-chip" data-query="https://www.rottentomatoes.com/m/inception" data-type="movie" title="Paste Rotten Tomatoes review link">🍅 RT: Inception</button>
+          <button type="button" class="preset-chip" data-query="https://store.steampowered.com/app/782330/DOOM_Eternal/" data-type="game" title="Paste Steam store link">🎮 Steam: DOOM</button>
+          <button type="button" class="preset-chip" data-query="https://www.metacritic.com/game/elden-ring/" data-type="game" title="Paste Metacritic link">Ⓜ️ Metacritic: Elden Ring</button>
           
           <button type="button" id="btnAddCustomMedia" class="preset-chip" style="color: var(--accent-primary); border-color: rgba(139, 92, 246, 0.4); margin-left: auto;">
             + Add Custom Media Manually
@@ -612,6 +613,24 @@
       <form id="formLogMedia">
         <div class="modal-body">
           <input type="hidden" id="mediaId">
+
+          <!-- Quick Link Auto-Fill Section -->
+          <div class="link-autofill-banner" id="linkAutoFillBanner">
+            <div class="link-autofill-header">
+              <span class="link-autofill-label">
+                <svg class="svg-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                Auto-Fill from Review / Media Link
+              </span>
+              <span class="link-autofill-hint">Rotten Tomatoes • IMDb • Metacritic • IGN • Steam • MAL</span>
+            </div>
+            <div class="link-autofill-input-row">
+              <input type="url" id="inputAutoFillUrl" class="form-input form-input-sm" placeholder="Paste link (Rotten Tomatoes, IMDb, Metacritic, IGN, Steam, MAL, etc.)...">
+              <button type="button" id="btnExtractUrl" class="btn-extract-url">
+                <span class="btn-text">Extract</span>
+              </button>
+            </div>
+            <div id="extractStatusMsg" class="extract-status-msg" style="display:none;"></div>
+          </div>
 
           <!-- Basic Title & Poster -->
           <div class="form-row-2col">
