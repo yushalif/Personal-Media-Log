@@ -1,1 +1,42 @@
-[]
+[
+  {
+    "id": "item-1794906256164",
+    "title": "Bloodborne™",
+    "type": "game",
+    "releaseYear": 2015,
+    "posterUrl": "https://image.api.playstation.com/vulcan/img/rnd/202011/0713/WSZqsrnejjt85wYmUqeBQvMQ.png",
+    "externalScore": {
+      "source": "Metacritic",
+      "rating": "N/A"
+    },
+    "status": "In Progress",
+    "discoverySource": "",
+    "recommendedBy": "",
+    "socialContext": [
+      "Solo"
+    ],
+    "dateExperienced": "2026-11-17",
+    "metrics": {
+      "favorite": 5,
+      "enjoyment": 5,
+      "retention": 4,
+      "yapFactor": 4,
+      "characterInfluence": 4
+    },
+    "emotionalImpact": {
+      "cried": false
+    },
+    "gameDetails": {
+      "hoursPlayed": 0,
+      "timesFinished": 0
+    },
+    "bookDetails": {
+      "author": "",
+      "pages": 0,
+      "format": ""
+    },
+    "review": "Hunt your nightmares as you search for answers in the ancient city of Yharnam, now cursed with a strange endemic illness spreading through the streets like wildfire. Danger, death and madness lurk around every corner of this dark and horrific world, and you must discover its darkest secrets in order to survive.    -A Terrifying New World Journey to a horror-filled gothic city where deranged mobs and nightmarish creatures lurk around every corner. -Strategic Action Combat Armed with a unique arsenal of weaponry, including guns and saw cleavers, youll need wits, strategy and reflexes to take down the agile and intelligent enemies that guard the citys dark secrets. -A New Generation of Action RPG Stunningly detailed gothic environments, atmospheric lighting, and advanced new online experiences showcase the power and prowess of the PlayStationR4 system. -Ever-changing Chalice Dungeons to Explore Use holy chalices to gain entrance to a network of vast underground ruins, filled with traps, beasts, and rewards, to explore and conquer alone or with others. These procedurally generated dungeons offer brand new challenges to master, and can be uploaded or shared with friends.    CRITICAL PRAISE FOR BLOODBORNE -“A macabre masterpiece.” 9.7510 – Game Informer -Intelligent and intense, its simply PS4’s best exclusive game. 4.5  5 - GamesRadar -“Gripping” 9.610 - GameTrailers -...damn satisfying 910 – Destructoid -PlayStation 4 finally has its killer app.” 910 - National Post CDN -enthralling, exhausting and utterly exhilarating - IGN -easily the best PS4 exclusive title yet.” 910 - Escapist Magazine -“...an amazing experience” 1010 - Gaming Age",
+    "createdAt": "2026-11-17T09:04:18.504Z",
+    "updatedAt": "2026-11-17T09:04:18.504Z"
+  }
+]
