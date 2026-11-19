@@ -724,7 +724,13 @@ class MediaLogApp {
     document.body.className = `theme-${viewName}`;
 
     document.querySelectorAll('.nav-tab-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-tab') === viewName);
+      const isActive = btn.getAttribute('data-tab') === viewName;
+      btn.classList.toggle('active', isActive);
+      if (isActive && window.innerWidth <= 768) {
+        try {
+          btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        } catch (e) {}
+      }
     });
 
     const homeView = document.getElementById('homeView');
